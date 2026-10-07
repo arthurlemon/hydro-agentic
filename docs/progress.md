@@ -13,7 +13,7 @@
 - [x] Save project requirements in `PROJECT_PLAN.md`.
 - [x] Authenticate GitHub CLI as `arthurlemon`.
 - [x] Create private `arthurlemon/hydro-agentic` repository.
-- [ ] Push planning documents through the personal SSH alias.
+- [x] Push planning documents through the personal SSH alias.
 - [ ] Phase 0: Python bootstrap, tooling, configuration, and sample data.
 - [ ] Phase 1: fully local vertical slice.
 - [ ] Phase 2: MCP tool layer.
