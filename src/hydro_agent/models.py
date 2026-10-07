@@ -47,7 +47,10 @@ class Telemetry(Model):
     timestamp: AwareDatetime
     temperature_c: float
     load_pct: float = Field(ge=0, le=200)
-    baseline_stddev: float
+    baseline_stddev: float = Field(
+        description="Écart normalisé de température à la référence, en nombre d’écarts-types "
+        "(z-score sans unité); ce champ n’est pas l’écart-type en °C."
+    )
     oil_degradation_confirmed: bool
     oil_pressure: float | None = None
 

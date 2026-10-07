@@ -52,4 +52,10 @@ Contrôles finaux : `uv run pytest -q` — 43 tests réussis; `uv run ruff check
 - PostgreSQL 17 lancé avec Docker Compose sur `127.0.0.1:55432`, volume persistant. Aucun ancien fichier SQLite contenant des incidents à convertir.
 - Dépôt `state/postgres.py` avec psycopg, JSONB, transactions et verrous de lignes, insertion concurrente idempotente et verrou d’investigation de session. URI masquée dans la configuration; erreurs de connexion sans identifiants.
 - Suite exécutée contre PostgreSQL dans des schémas isolés : **48 tests réussis**, dont CLI/MCP réels, rollback, démarrage concurrent, unicité et verrou interprocessus. Les quatre nouveaux tests ont d’abord échoué avant l’implémentation du dépôt.
-- Essais OpenRouter réels à exécuter après le push de la migration; aucune métrique de qualité LLM inventée.
+- Migration poussée sur `main` : commit `e9625a4`; Ruff, mypy, construction et 48 tests validés.
+
+## Premiers essais réels et précision du contrat
+
+Les appels réels GPT-5.6 Luna ont fonctionné avec les outils Python et MCP. Trois premières investigations ont conclu `insufficient_evidence`, dont deux résultats trop prudents : le modèle a interprété `baseline_stddev` comme l’écart-type en °C plutôt que comme le score normalisé déjà calculé. Les observations et les résumés persistés montrent cette ambiguïté; aucune création d’ordre n’a eu lieu.
+
+Correction du contrat de télémétrie : `measurement_definitions` explique désormais la quantité `temperature_z_score`, son unité et le calcul déjà effectué. Le nom du champ et les valeurs restent compatibles avec les données existantes. Un test a d’abord échoué faute de définition, puis la suite de **49 tests** a réussi, ainsi que Ruff et mypy. Les scénarios sont rejoués avec le modèle réel pour vérifier l’effet de cette précision.

@@ -30,3 +30,6 @@ Sources : `asset:TR-1042`, `maintenance:TR-1042`, `telemetry:TR-1042:24h`, `pred
 Tous les rôles (`viewer`, `operator`, `maintenance_supervisor`, `admin`) peuvent lire. `viewer` ne peut ni préparer ni créer. Les autres rôles peuvent préparer un brouillon et créer **après** approbation. Seuls `maintenance_supervisor` et `admin` peuvent approuver/rejeter par la CLI humaine; aucun outil MCP ne permet cette décision. Un superviseur ne contourne pas l’approbation lors d’une création.
 
 L’identité, l’incident autorisé et l’accord de préparation sont attachés au processus serveur. Ajouter `role`, `approved_by` ou `approval` aux arguments est refusé. Accéder à un autre actif ou incident est refusé.
+## Mesure normalisée de température
+
+`get_recent_telemetry` retourne `measurement_definitions` avec les observations. Le champ historique `baseline_stddev` représente le z-score de température déjà calculé : `(température - moyenne de référence) / écart-type de référence`, sans unité. Par exemple, `3.7` signifie 3,7 écarts-types au-dessus de la référence; ce n’est pas un écart-type en °C. Le backend compare directement ce score au seuil de 3.

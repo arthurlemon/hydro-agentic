@@ -8,6 +8,15 @@ from hydro_agent.models import DomainError, Identity, Recommendation, Role
 SUPERVISOR = Identity(actor="superviseure-test", role=Role.SUPERVISOR)
 
 
+async def test_telemetry_defines_normalized_deviation_for_model(registry):
+    result = await registry.call("get_recent_telemetry", {"asset_id": "TR-1042"})
+    assert result.ok
+    assert result.data["observations"][-1]["baseline_stddev"] == 3.7
+    definition = result.data["measurement_definitions"]["baseline_stddev"]
+    assert definition["quantity"] == "temperature_z_score"
+    assert definition["unit"] == "1"
+
+
 async def test_approval_required_even_for_supervisor_and_forgery_rejected(registry):
     assert (await draft(registry)).ok
     for role in Role:

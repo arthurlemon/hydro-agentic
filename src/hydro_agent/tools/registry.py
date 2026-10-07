@@ -168,6 +168,18 @@ class ToolRegistry:
                         )
                     ],
                     "reference_time": self.event.timestamp.isoformat(),
+                    "measurement_definitions": {
+                        "baseline_stddev": {
+                            "quantity": "temperature_z_score",
+                            "unit": "1",
+                            "description": (
+                                "Écart normalisé (température - moyenne de référence) / "
+                                "écart-type de référence, déjà calculé. Ce n’est pas un "
+                                "écart-type en °C. Une valeur de 3.7 signifie une température "
+                                "à 3,7 écarts-types au-dessus de la référence."
+                            ),
+                        }
+                    },
                 },
                 sources=[f"telemetry:{asset_id}:{args.hours}h"],
             )
