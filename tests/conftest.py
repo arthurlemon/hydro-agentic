@@ -1,6 +1,11 @@
+import os
 from pathlib import Path
+from uuid import uuid4
 
+import psycopg
 import pytest
+from psycopg import sql
+from psycopg.conninfo import make_conninfo
 
 from hydro_agent.models import Identity
 
@@ -8,14 +13,29 @@ DATA = Path(__file__).resolve().parents[1] / "data"
 
 
 @pytest.fixture
-def registry(tmp_path):
+def database_url():
+    # Chaque test possède uniquement son propre schéma; aucune table applicative supprimée.
+    url = os.environ.get(
+        "HYDRO_TEST_DATABASE_URL", "postgresql://hydro:hydro-local@127.0.0.1:55432/hydro"
+    )
+    schema = f"hydro_test_{uuid4().hex}"
+    with psycopg.connect(url, autocommit=True) as connection:
+        connection.execute(sql.SQL("CREATE SCHEMA {}").format(sql.Identifier(schema)))
+        try:
+            yield make_conninfo(url, options=f"-csearch_path={schema}")
+        finally:
+            connection.execute(sql.SQL("DROP SCHEMA {} CASCADE").format(sql.Identifier(schema)))
+
+
+@pytest.fixture
+def registry(database_url):
     from hydro_agent.services.data import DataService
     from hydro_agent.services.search import SearchService
-    from hydro_agent.state.sqlite import IncidentRepository
+    from hydro_agent.state.postgres import IncidentRepository
     from hydro_agent.tools.registry import ToolRegistry
 
     data = DataService(DATA)
-    repository = IncidentRepository(tmp_path / "state.sqlite3")
+    repository = IncidentRepository(database_url)
     incident = repository.begin(data.get_event("EVT-48392"))
     return ToolRegistry(
         data,

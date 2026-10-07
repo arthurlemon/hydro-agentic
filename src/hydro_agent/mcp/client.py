@@ -61,7 +61,7 @@ async def connect(
     }
     env.update(
         HYDRO_DATA_DIR=str(settings.data_dir.resolve()),
-        HYDRO_DB_PATH=str(settings.db_path.resolve()),
+        HYDRO_DATABASE_URL=settings.database_url.get_secret_value(),
         HYDRO_ACTOR=settings.actor,
         HYDRO_ROLE=settings.role.value,
         OPENROUTER_API_KEY="",

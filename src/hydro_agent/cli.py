@@ -15,11 +15,11 @@ from hydro_agent.mcp.client import connect
 from hydro_agent.mcp.server import build_registry
 from hydro_agent.models import DomainError
 from hydro_agent.services.data import DataService
-from hydro_agent.state.sqlite import IncidentRepository
+from hydro_agent.state.postgres import IncidentRepository
 
 
 async def run(args: argparse.Namespace, settings: Settings) -> dict[str, Any]:
-    repository = IncidentRepository(settings.db_path)
+    repository = IncidentRepository(settings.database_url.get_secret_value())
     if args.command == "investigate":
         model = OpenRouterModel(
             settings.openrouter_api_key.get_secret_value(), settings.openrouter_model

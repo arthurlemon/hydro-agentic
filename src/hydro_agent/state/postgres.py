@@ -1,13 +1,12 @@
-"""Transactions SQLite : preuves, approbation et ordre unique par incident."""
+"""Transactions PostgreSQL : preuves, approbation et ordre unique par incident."""
 
-import fcntl
-import json
-import sqlite3
 from collections.abc import Iterator
 from contextlib import contextmanager
 from datetime import UTC, datetime
-from pathlib import Path
 from typing import Any, cast
+
+import psycopg
+from psycopg.types.json import Jsonb
 
 from hydro_agent.models import Anomaly, DomainError, Identity, Recommendation, Role, ToolResult
 
@@ -25,29 +24,31 @@ def authorize(identity: Identity, *, supervisor: bool = False) -> None:
 
 
 class IncidentRepository:
-    def __init__(self, path: Path) -> None:
-        self.path = path
-        path.parent.mkdir(parents=True, exist_ok=True)
+    def __init__(self, database_url: str) -> None:
+        self.database_url = database_url
         with self._transaction() as connection:
+            # Sérialiser la création du schéma entre CLI et serveurs MCP concurrents.
+            connection.execute(
+                "SELECT pg_advisory_xact_lock("
+                "hashtextextended(current_schema() || ':hydro-ddl', 0))"
+            )
             connection.execute("""CREATE TABLE IF NOT EXISTS incidents (
-                id INTEGER PRIMARY KEY AUTOINCREMENT, event_id TEXT UNIQUE NOT NULL,
-                payload TEXT NOT NULL)""")
+                id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                event_id TEXT UNIQUE NOT NULL, payload JSONB NOT NULL)""")
             connection.execute("""CREATE TABLE IF NOT EXISTS audit (
-                id INTEGER PRIMARY KEY AUTOINCREMENT, incident_id TEXT NOT NULL,
-                timestamp TEXT NOT NULL, payload TEXT NOT NULL)""")
+                id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, incident_id TEXT NOT NULL,
+                timestamp TIMESTAMPTZ NOT NULL, payload JSONB NOT NULL)""")
 
     @contextmanager
-    def _transaction(self) -> Iterator[sqlite3.Connection]:
-        connection = sqlite3.connect(self.path, timeout=30)
+    def _transaction(self) -> Iterator[psycopg.Connection[Any]]:
         try:
-            connection.execute("BEGIN IMMEDIATE")
-            yield connection
-            connection.commit()
-        except BaseException:
-            connection.rollback()
-            raise
-        finally:
-            connection.close()
+            with psycopg.connect(self.database_url, connect_timeout=5) as connection:
+                connection.execute("SET LOCAL lock_timeout = '10s'")
+                yield connection
+        except psycopg.Error:
+            raise DomainError(
+                "Opération PostgreSQL impossible; vérifier la connexion et réessayer."
+            ) from None
 
     @staticmethod
     def _number(incident_id: str) -> int:
@@ -58,33 +59,35 @@ class IncidentRepository:
         except ValueError as exc:
             raise DomainError("Identifiant d’incident invalide.") from exc
 
-    def _get(self, connection: sqlite3.Connection, incident_id: str) -> dict[str, Any]:
+    def _get(self, connection: psycopg.Connection[Any], incident_id: str) -> dict[str, Any]:
         row = connection.execute(
-            "SELECT payload FROM incidents WHERE id=?", (self._number(incident_id),)
+            "SELECT payload FROM incidents WHERE id=%s FOR UPDATE", (self._number(incident_id),)
         ).fetchone()
         if row is None:
             raise DomainError(f"Incident inconnu : {incident_id}.")
-        return cast(dict[str, Any], json.loads(row[0]))
+        return cast(dict[str, Any], row[0])
 
-    def _save(self, connection: sqlite3.Connection, state: dict[str, Any]) -> None:
+    def _save(self, connection: psycopg.Connection[Any], state: dict[str, Any]) -> None:
         connection.execute(
-            "UPDATE incidents SET payload=? WHERE id=?",
-            (json.dumps(state, ensure_ascii=False), self._number(state["incident_id"])),
+            "UPDATE incidents SET payload=%s WHERE id=%s",
+            (Jsonb(state), self._number(state["incident_id"])),
         )
 
     def begin(self, event: Anomaly) -> dict[str, Any]:
         with self._transaction() as connection:
             row = connection.execute(
-                "SELECT payload FROM incidents WHERE event_id=?", (event.event_id,)
+                "INSERT INTO incidents(event_id,payload) VALUES(%s, '{}'::jsonb) "
+                "ON CONFLICT (event_id) DO NOTHING RETURNING id",
+                (event.event_id,),
             ).fetchone()
-            if row:
-                return cast(dict[str, Any], json.loads(row[0]))
-            cursor = connection.execute(
-                "INSERT INTO incidents(event_id,payload) VALUES(?,?)", (event.event_id, "{}")
-            )
-            assert cursor.lastrowid is not None
+            if row is None:
+                existing = connection.execute(
+                    "SELECT payload FROM incidents WHERE event_id=%s", (event.event_id,)
+                ).fetchone()
+                assert existing is not None
+                return cast(dict[str, Any], existing[0])
             state: dict[str, Any] = {
-                "incident_id": f"INC-{1000 + cursor.lastrowid}",
+                "incident_id": f"INC-{1000 + row[0]}",
                 "event_id": event.event_id,
                 "asset_id": event.asset_id,
                 "event": event.model_dump(mode="json"),
@@ -105,20 +108,24 @@ class IncidentRepository:
 
     @contextmanager
     def investigation(self, incident_id: str) -> Iterator[None]:
-        """Verrou local macOS/Linux libéré même si le processus s’arrête."""
-        number = self._number(incident_id)
-        path = self.path.with_name(f"{self.path.name}.incident-{number}.lock")
-        with path.open("a") as lock:
-            try:
-                fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-            except BlockingIOError:
-                raise DomainError(
-                    "Une investigation est déjà en cours pour cet incident."
-                ) from None
-            try:
+        """Verrou de session partagé entre processus; libéré à la fermeture de connexion."""
+        self._number(incident_id)
+        try:
+            with psycopg.connect(
+                self.database_url, autocommit=True, connect_timeout=5
+            ) as connection:
+                row = connection.execute(
+                    "SELECT pg_try_advisory_lock("
+                    "hashtextextended(current_schema() || ':investigation:' || %s, 0))",
+                    (incident_id,),
+                ).fetchone()
+                if row is None or not row[0]:
+                    raise DomainError("Une investigation est déjà en cours pour cet incident.")
                 yield
-            finally:
-                fcntl.flock(lock, fcntl.LOCK_UN)
+        except psycopg.Error:
+            raise DomainError(
+                "Verrou PostgreSQL indisponible; réessayer l’investigation."
+            ) from None
 
     def start(self, incident_id: str) -> dict[str, Any]:
         with self._transaction() as connection:
@@ -291,10 +298,10 @@ class IncidentRepository:
     def audit(self, incident_id: str, payload: dict[str, Any]) -> None:
         with self._transaction() as connection:
             connection.execute(
-                "INSERT INTO audit(incident_id,timestamp,payload) VALUES(?,?,?)",
+                "INSERT INTO audit(incident_id,timestamp,payload) VALUES(%s,%s,%s)",
                 (
                     incident_id,
-                    datetime.now(UTC).isoformat(),
-                    json.dumps(payload, ensure_ascii=False),
+                    datetime.now(UTC),
+                    Jsonb(payload),
                 ),
             )

@@ -13,7 +13,7 @@ from hydro_agent.config import Settings
 from hydro_agent.models import DomainError, ToolResult
 from hydro_agent.services.data import DataService
 from hydro_agent.services.search import SearchService
-from hydro_agent.state.sqlite import IncidentRepository
+from hydro_agent.state.postgres import IncidentRepository
 from hydro_agent.tools.registry import SPECS, ToolRegistry
 
 
@@ -21,7 +21,7 @@ def build_registry(settings: Settings, incident_id: str, *, prepare: bool = Fals
     return ToolRegistry(
         DataService(settings.data_dir),
         SearchService(settings.data_dir / "procedures"),
-        IncidentRepository(settings.db_path),
+        IncidentRepository(settings.database_url.get_secret_value()),
         settings.identity,
         incident_id,
         allow_draft=prepare,

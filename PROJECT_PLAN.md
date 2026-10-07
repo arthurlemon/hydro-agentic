@@ -81,7 +81,7 @@ JSON / BD         Simulation Python     Recherche locale
                          ↓
 Brouillon → approbation → service d’ordres de travail
                          ↓
-État persistant : SQLite → Cosmos DB facultatif
+État persistant : PostgreSQL → PostgreSQL géré ou Cosmos DB facultatif
 ```
 
 Préoccupations transversales : identité, autorisation, journaux structurés, OpenTelemetry, Application Insights, évaluations, tests et protection contre les injections dans les documents.
@@ -188,7 +188,7 @@ La conversation n’est jamais l’état de référence. Un incident conserve so
 }
 ```
 
-Stockage initial : SQLite ou JSON; cible facultative : Cosmos DB.
+Stockage initial : PostgreSQL; cible facultative : PostgreSQL géré ou Cosmos DB.
 
 États : `new`, `investigating`, `insufficient_evidence`, `recommendation_ready`, `awaiting_approval`, `approved`, `rejected`, `work_order_created`, `failed`.
 
@@ -284,7 +284,7 @@ hydro-agentic/
 │   ├── tools/          # Contrats, autorisation, appels
 │   ├── mcp/            # Serveur et client
 │   ├── services/       # Actifs, télémétrie, ML, recherche, ordres
-│   ├── state/          # Modèles et dépôt SQLite
+│   ├── state/          # Modèles et dépôt PostgreSQL
 │   ├── observability/  # Journaux et traces
 │   └── config.py
 ├── data/               # Actifs, télémétrie, entretien, anomalies
@@ -326,7 +326,7 @@ Vérifier la disponibilité de l’offre gratuite, déployer, indexer les procé
 
 ### Phase 5 — Persistance
 
-SQLite d’abord; Cosmos DB facultatif. Interface de dépôt indépendante de l’agent.
+PostgreSQL d’abord; Cosmos DB facultatif. Interface de dépôt indépendante de l’agent.
 
 ### Phase 6 — Approbation humaine
 
@@ -365,7 +365,7 @@ Conserver `predict_failure_risk()` et ajouter `MockAnalyticsService` puis `Datab
 | MCP local | Azure Functions / MCP géré |
 | Markdown synthétique | Documentation opérationnelle gouvernée |
 | Recherche locale | Azure AI Search |
-| SQLite | Cosmos DB / base de processus d’entreprise |
+| PostgreSQL | PostgreSQL géré / Cosmos DB / base de processus d’entreprise |
 | Ordres simulés | SAP / Maximo |
 | Rôles locaux | Entra ID + RBAC |
 | Traces locales | Application Insights |

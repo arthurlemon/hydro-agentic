@@ -8,7 +8,7 @@ from pydantic import Field, ValidationError
 from hydro_agent.models import Anomaly, DomainError, Identity, Model, Recommendation, ToolResult
 from hydro_agent.services.data import DataService
 from hydro_agent.services.search import SearchService
-from hydro_agent.state.sqlite import IncidentRepository
+from hydro_agent.state.postgres import IncidentRepository
 
 
 class AssetArgs(Model):

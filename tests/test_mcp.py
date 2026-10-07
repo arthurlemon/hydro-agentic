@@ -12,7 +12,7 @@ async def test_mcp_real_stdio_schemas_binding_and_approval(registry):
         args=["-m", "hydro_agent.mcp.server", "--incident", registry.incident_id],
         env={
             **os.environ,
-            "HYDRO_DB_PATH": str(registry.repository.path),
+            "HYDRO_DATABASE_URL": registry.repository.database_url,
             "HYDRO_DATA_DIR": str(DATA),
             "HYDRO_ROLE": "operator",
             "HYDRO_ACTOR": "test-mcp",
@@ -44,7 +44,7 @@ async def test_mcp_client_matches_direct_tool_results(registry):
     from hydro_agent.config import Settings
     from hydro_agent.mcp.client import connect
 
-    settings = Settings(HYDRO_DATA_DIR=DATA, HYDRO_DB_PATH=registry.repository.path)
+    settings = Settings(HYDRO_DATA_DIR=DATA, HYDRO_DATABASE_URL=registry.repository.database_url)
     async with connect(settings, registry.incident_id) as tools:
         assert len(await tools.definitions()) == 10
         remote = await tools.call("get_recent_telemetry", {"asset_id": "TR-1042"})
@@ -62,7 +62,7 @@ async def test_full_investigation_draft_approval_and_restart_over_mcp(registry):
     from hydro_agent.mcp.client import connect
     from hydro_agent.models import Identity, Recommendation, Role
 
-    settings = Settings(HYDRO_DATA_DIR=DATA, HYDRO_DB_PATH=registry.repository.path)
+    settings = Settings(HYDRO_DATA_DIR=DATA, HYDRO_DATABASE_URL=registry.repository.database_url)
     citations = ["asset:TR-1042", "telemetry:TR-1042:24h", "procedure:TR-MAINT-004"]
     final = Recommendation(
         outcome="recommendation_ready",

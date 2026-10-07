@@ -4,14 +4,14 @@ Exécution native dans cette session, selon la demande de l’utilisateur. Spéc
 
 ## Objectif et décisions
 
-Livrer un parcours local français avec données synthétiques, services typés, SQLite, agent à appels d’outils et transport MCP stdio. Aucun service Azure à provisionner.
+Livrer un parcours local français avec données synthétiques, services typés, PostgreSQL, agent à appels d’outils et transport MCP stdio. Aucun service Azure à provisionner. PostgreSQL remplace le choix SQLite initial à la demande de l’utilisateur.
 
 - Python 3.12, uv, Pydantic, pytest, Ruff, mypy, SDK MCP officiel et HTTPX.
 - OpenRouter configurable avec `OPENROUTER_MODEL` et `OPENROUTER_API_KEY`; clé ajoutée par l’utilisateur pour l’essai réel.
 - Double de modèle pour les tests reproductibles; aucune validation autonome réelle revendiquée sans modèle.
 - Recherche lexicale normalisée avec citations; interface remplaçable par Azure AI Search.
 - Identité attachée par l’hôte; aucune identité ou approbation fournie par le modèle.
-- SQLite : événement unique, approbation liée au brouillon, création transactionnelle unique.
+- PostgreSQL : événement unique, approbation liée au brouillon, création transactionnelle unique.
 - Documentation, consignes, descriptions d’outils, données narratives et affichage en français; noms techniques en anglais.
 
 ## Vérifications prioritaires
@@ -27,7 +27,7 @@ Fuseaux et fenêtre relative à l’événement; absence de données et pannes s
 
 ## 2. Services et état
 
-Fichiers : `models.py`, `services/data.py`, `services/search.py`, `state/sqlite.py`, `tools/registry.py`.
+Fichiers : `models.py`, `services/data.py`, `services/search.py`, `state/postgres.py`, `tools/registry.py`.
 
 - [x] Tests initiaux de données absentes, télémétrie datée, recherche accentuée, autorisations et idempotence.
 - [x] Interfaces `DataService`, `SearchService`, `IncidentRepository`, `ToolRegistry.call(name, arguments)`.

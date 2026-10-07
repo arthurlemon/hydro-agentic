@@ -8,7 +8,7 @@ from pydantic import ValidationError
 
 from hydro_agent.agent.model import ModelClient
 from hydro_agent.models import DomainError, Recommendation, ToolResult
-from hydro_agent.state.sqlite import FROZEN, IncidentRepository
+from hydro_agent.state.postgres import FROZEN, IncidentRepository
 
 SYSTEM = """Tu es un assistant d’investigation d’actifs électriques SYNTHÉTIQUES.
 Réponds en français. Choisis toi-même tes outils et adapte tes recherches aux preuves reçues.

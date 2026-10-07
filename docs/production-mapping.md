@@ -9,9 +9,9 @@ Les phases 0 à 2 sont locales. Aucun compte Azure, projet Foundry, index de rec
 | JSON actifs/télémétrie/historique | Services internes autorisés | Adaptateurs typés, observabilité et erreurs |
 | Prédiction JSON | Endpoint Databricks Model Serving | Schéma, authentification, disponibilité, absence de prédiction sans résultat |
 | Markdown + recherche lexicale | Azure AI Search | Index, ingestion, retrieval, citations et coût du niveau disponible |
-| SQLite | SQLite persistant ou Cosmos DB | Transactions/idempotence adaptées, concurrence et sauvegardes |
+| PostgreSQL local | PostgreSQL géré ou Cosmos DB facultatif | Transactions/idempotence adaptées, concurrence et sauvegardes |
 | Rôles d’environnement | Identité vérifiée côté backend | Entra ID ou autre fournisseur, rôles et approbations authentifiées |
-| Journal SQLite | OpenTelemetry + Application Insights | Traces, requêtes, citations, jetons, latence et refus |
+| Journal PostgreSQL | OpenTelemetry + Application Insights | Traces, requêtes, citations, jetons, latence et refus |
 | Doubles déterministes | Évaluations avec modèle réel | Scénarios et mesures observées, sans pourcentages inventés |
 
 ## Arrêt avant Foundry

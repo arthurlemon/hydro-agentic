@@ -14,8 +14,9 @@ class Settings(BaseSettings):
     openrouter_api_key: SecretStr = SecretStr("")
     openrouter_model: str = "openai/gpt-5.6-luna"
     data_dir: Path = Field(default=Path("data"), validation_alias="HYDRO_DATA_DIR")
-    db_path: Path = Field(
-        default=Path(".hydro/incidents.sqlite3"), validation_alias="HYDRO_DB_PATH"
+    database_url: SecretStr = Field(
+        default=SecretStr("postgresql://hydro:hydro-local@127.0.0.1:55432/hydro"),
+        validation_alias="HYDRO_DATABASE_URL",
     )
     max_steps: int = Field(default=24, ge=1, le=100, validation_alias="HYDRO_MAX_STEPS")
     actor: str = Field(default="operateur-local", min_length=1, validation_alias="HYDRO_ACTOR")

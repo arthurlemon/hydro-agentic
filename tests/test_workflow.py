@@ -23,11 +23,11 @@ async def test_approval_required_even_for_supervisor_and_forgery_rejected(regist
 
 
 async def test_approved_creation_survives_restart_and_concurrency(registry):
-    from hydro_agent.state.sqlite import IncidentRepository
+    from hydro_agent.state.postgres import IncidentRepository
 
     assert (await draft(registry)).ok
     registry.repository.approve(registry.incident_id, SUPERVISOR)
-    restarted = IncidentRepository(registry.repository.path)
+    restarted = IncidentRepository(registry.repository.database_url)
     with ThreadPoolExecutor(max_workers=6) as pool:
         orders = list(
             pool.map(

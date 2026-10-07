@@ -2,7 +2,7 @@
 
 ## Frontières de confiance
 
-Le modèle, sa conversation et les documents récupérés ne déterminent jamais l’identité ni l’approbation. Le processus hôte, les fichiers synthétiques et la base locale sont de confiance dans cette démonstration. Un utilisateur contrôlant l’environnement ou SQLite peut changer ces données : l’authentification réelle devra être ajoutée avant un déploiement multi-utilisateur.
+Le modèle, sa conversation et les documents récupérés ne déterminent jamais l’identité ni l’approbation. Le processus hôte, les fichiers synthétiques et PostgreSQL sont de confiance dans cette démonstration. Un utilisateur contrôlant l’environnement ou la base peut changer ces données : l’authentification réelle devra être ajoutée avant un déploiement multi-utilisateur.
 
 | Menace | Contrôle actuel | Vérification |
 |---|---|---|
@@ -11,7 +11,7 @@ Le modèle, sa conversation et les documents récupérés ne déterminent jamais
 | Référence à un autre incident | Registre lié à un incident et son actif | Accès croisé refusé |
 | Citation inventée ou simple extrait | Source récupérée exigée; procédure complète requise | Brouillon non étayé refusé |
 | Confusion huile historique / actuelle | Condition codée sur la télémétrie actuelle | Cas température seule refusé pour P1 |
-| Rejeu ou concurrence de création | Transaction SQLite et ordre conservé dans l’incident | Appels concurrents et reprise renvoient le même ordre |
+| Rejeu ou concurrence de création | Transaction PostgreSQL, verrou de ligne et ordre conservé dans l’incident | Appels concurrents et reprise renvoient le même ordre |
 | Modification après approbation | Brouillon/preuves figés; approbation liée à sa copie exacte | Modification et création après rejet refusées |
 | Traversée de chemins | Identifiants de procédures limités | `../` refusé |
 | Boucle ou panne modèle | Limite d’étapes, délai HTTP, état d’échec persisté | Limite et reprise testées |
