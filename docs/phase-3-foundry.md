@@ -26,13 +26,15 @@ Ressources minimales : groupe dédié, compte Foundry avec identité gérée, pr
 - [x] Observer RED avec `uv run pytest tests/test_foundry.py -q`.
 - [x] Ajouter le SDK `azure-ai-projects` 2.x, `azure-identity` et aiohttp avec uv. Interface compatible `ModelClient.complete(messages, tools)`, règles métier inchangées.
 - [x] Ajouter `--provider openrouter|foundry`, configuration endpoint/déploiement/nom/version; OpenRouter reste le défaut. Séparer la publication d’agent de son invocation pour éviter des versions automatiques à chaque exécution.
-- [ ] Tests CLI de configuration et absence de dépendance à une clé OpenRouter pour Foundry; suite entière, Ruff, mypy, build. Commit et push.
+- [x] Tests CLI de configuration et absence de dépendance à une clé OpenRouter pour Foundry; suite entière (69 tests), Ruff, mypy, build. Commit `2afe91d` poussé sur `main`.
 
 ### 3. Essais réels
 - [x] Publier une version du véritable agent dans Foundry; version 3 avec dix fonctions, consignes et schéma de conclusion.
 - [x] Utiliser des événements synthétiques distincts pour ne pas écraser le brouillon OpenRouter INC-1001.
 - [x] Vérifier P1/brouillon via MCP, faible risque et preuves insuffisantes, puis le refus de création sans approbation.
-- [ ] Consigner endpoints et résultats sans clés, tokens ou scores de qualité inventés. Commit et push.
+- [x] Consigner endpoints et résultats sans clés, tokens d’authentification ou scores de qualité inventés. Bilan, offres gratuites et code poussés sur `main` : `2afe91d`.
+
+Phase 3 terminée. Arrêt demandé par l’utilisateur après ce travail; ne pas commencer la phase 4 sans nouvelle demande.
 
 ## Points à vérifier
 
