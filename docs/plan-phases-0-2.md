@@ -55,6 +55,6 @@ Fichiers : `mcp/server.py`, `mcp/client.py`, tests d’intégration stdio.
 - [x] Architecture, contrats, menaces, limites et configuration Foundry à venir documentés.
 - [x] Revue indépendante et corrections avec tests de régression.
 - [x] Contrôles finaux réussis : 43 tests, Ruff, mypy, distribution source et wheel.
-- [ ] Commit et push.
+- [x] Commits `0b1cf86` et `78345cd` poussés sur `origin/main`.
 
 Arrêt avant la phase 3. Les écarts mineurs au découpage initial et les vérifications sont consignés dans [le suivi](progress.md).
