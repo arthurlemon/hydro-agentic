@@ -46,3 +46,9 @@ def test_settings_read_uv_project_environment(monkeypatch):
     assert settings.openrouter_api_key.get_secret_value() == "secret-de-test"
     assert "secret-de-test" not in repr(settings)
     assert settings.role == "operator"
+def test_default_model_is_gpt_56_luna(monkeypatch):
+    from hydro_agent.config import Settings
+
+    monkeypatch.delenv("OPENROUTER_MODEL", raising=False)
+    assert Settings(_env_file=None).openrouter_model == "openai/gpt-5.6-luna"
+

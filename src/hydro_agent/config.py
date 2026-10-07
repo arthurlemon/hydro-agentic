@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     openrouter_api_key: SecretStr = SecretStr("")
-    openrouter_model: str = "openai/gpt-4.1-mini"
+    openrouter_model: str = "openai/gpt-5.6-luna"
     data_dir: Path = Field(default=Path("data"), validation_alias="HYDRO_DATA_DIR")
     db_path: Path = Field(
         default=Path(".hydro/incidents.sqlite3"), validation_alias="HYDRO_DB_PATH"

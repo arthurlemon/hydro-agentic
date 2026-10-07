@@ -30,7 +30,7 @@ La documentation, les procédures, les consignes et l’affichage sont en franç
 
 ## Investigation réelle avec OpenRouter
 
-Après avoir copié `.env.example` vers `.env`, renseigner `OPENROUTER_API_KEY` et choisir un modèle prenant en charge les appels d’outils avec `OPENROUTER_MODEL` (défaut : `openai/gpt-4.1-mini`). Cette exécution appelle une API payante selon la tarification du modèle; aucun appel réseau n’est nécessaire pour les tests.
+Après avoir copié `.env.example` vers `.env`, renseigner `OPENROUTER_API_KEY` et choisir un modèle prenant en charge les appels d’outils avec `OPENROUTER_MODEL` (défaut : `openai/gpt-5.6-luna`). Cette exécution appelle une API payante selon la tarification du modèle; aucun appel réseau n’est nécessaire pour les tests.
 
 ```bash
 # Phase 1 : outils Python directs, recommandation sans brouillon.
