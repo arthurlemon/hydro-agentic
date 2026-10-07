@@ -16,7 +16,7 @@ Les phases 0 à 2 sont locales. Aucun compte Azure, projet Foundry, index de rec
 
 ## Arrêt avant Foundry
 
-1. Ajouter la clé OpenRouter dans `.env` pour vérifier un parcours réel Python puis MCP avec les données synthétiques.
-2. Examiner les outils choisis, les citations, le brouillon et le refus de créer avant approbation.
+1. Réalisé : clé OpenRouter locale configurée et parcours réels Python/MCP exécutés avec GPT-5.6 Luna.
+2. Réalisé : outils choisis, citations, brouillon et refus de création avant approbation examinés. Voir [les essais](essais-openrouter.md).
 3. Choisir ensuite le compte/abonnement Azure, la région et le déploiement de modèle disponibles. Cette étape nécessitera l’accès utilisateur au portail si une connexion ou une création de compte est requise.
 4. Implémenter la phase 3 après ces décisions. Les commandes et l’API Foundry seront vérifiées contre leur documentation actuelle lors de cette phase.

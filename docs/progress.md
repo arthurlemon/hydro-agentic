@@ -19,7 +19,7 @@
 
 Projet uv, configuration secrète masquée, schémas Pydantic, données synthétiques et sept documents français ajoutés. Premier cycle : 3 tests en échec pour modules absents, puis 3 réussis; Ruff et mypy réussis. Commit `0b1cf86`.
 
-## Phase 1 — implémentée, validation du modèle réel en attente
+## Phase 1 — implémentée et essayée avec le modèle réel
 
 Services JSON, recherche lexicale, dix outils typés, preuves et état PostgreSQL (initialement SQLite), approbation séparée, ordre simulé idempotent. Boucle autonome OpenRouter avec appels d’outils variables et récupération itérative; plafond d’étapes et conclusion structurée vérifiée. CLI d’investigation, lecture, approbation, rejet et reprise.
 
@@ -58,4 +58,8 @@ Contrôles finaux : `uv run pytest -q` — 43 tests réussis; `uv run ruff check
 
 Les appels réels GPT-5.6 Luna ont fonctionné avec les outils Python et MCP. Trois premières investigations ont conclu `insufficient_evidence`, dont deux résultats trop prudents : le modèle a interprété `baseline_stddev` comme l’écart-type en °C plutôt que comme le score normalisé déjà calculé. Les observations et les résumés persistés montrent cette ambiguïté; aucune création d’ordre n’a eu lieu.
 
-Correction du contrat de télémétrie : `measurement_definitions` explique désormais la quantité `temperature_z_score`, son unité et le calcul déjà effectué. Le nom du champ et les valeurs restent compatibles avec les données existantes. Un test a d’abord échoué faute de définition, puis la suite de **49 tests** a réussi, ainsi que Ruff et mypy. Les scénarios sont rejoués avec le modèle réel pour vérifier l’effet de cette précision.
+Correction du contrat de télémétrie : `measurement_definitions` explique désormais la quantité `temperature_z_score`, son unité et le calcul déjà effectué. Le nom du champ et les valeurs restent compatibles avec les données existantes. Un test a d’abord échoué faute de définition, puis la suite de **49 tests** a réussi, ainsi que Ruff et mypy. Correction poussée : `b806c50`.
+
+Les quatre scénarios rejoués avec GPT-5.6 Luna donnent les résultats attendus : P1 sous 24 h avec brouillon en attente (MCP), absence d’urgence pour le faible risque (MCP), preuves insuffisantes sans huile confirmée (Python), preuves insuffisantes pour l’actif inconnu (Python). Une création sans approbation a ensuite été refusée via MCP. [Bilan et observations](essais-openrouter.md).
+
+Point d’arrêt : PostgreSQL fonctionne localement, `INC-1001` attend une approbation, aucun ordre n’a été créé pendant ces essais réels. La prochaine phase est la configuration Foundry; aucune ressource Azure n’a été créée.

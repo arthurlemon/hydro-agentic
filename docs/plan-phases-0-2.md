@@ -42,7 +42,7 @@ Fichiers : `agent/model.py`, `agent/loop.py`, `cli.py`, `scripts/run_local.py`.
 - [x] Adaptateur OpenRouter et protocole de modèle injectable.
 - [x] CLI `investigate`, `state`, `approve`, `reject`, `resume`; approbation hors agent.
 - [x] Cas de risque élevé, faible risque, température seule, actif inconnu et document malveillant.
-- [ ] Validation avec une clé OpenRouter réelle (attente de configuration utilisateur).
+- [x] Essais avec une clé OpenRouter réelle et GPT-5.6 Luna : quatre scénarios observés, transports Python et MCP, contrôle d’approbation vérifié. Voir `docs/essais-openrouter.md`.
 
 ## 4. MCP — phase 2
 

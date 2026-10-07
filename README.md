@@ -27,6 +27,7 @@ Les tests utilisent une vraie base PostgreSQL et créent chacun un schéma tempo
 - [Plan des phases 0 à 2](docs/plan-phases-0-2.md)
 - [Migration PostgreSQL et essais OpenRouter](docs/plan-postgresql.md)
 - [Avancement et vérifications](docs/progress.md)
+- [Résultats des essais réels GPT-5.6 Luna](docs/essais-openrouter.md)
 - [Architecture et limites](docs/architecture.md)
 - [Contrats des outils](docs/tool-contracts.md)
 - [Modèle de menaces](docs/threat-model.md)
