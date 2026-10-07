@@ -1,9 +1,21 @@
 import os
 import sys
 
+import pytest
 from conftest import DATA
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
+
+
+async def test_mcp_session_preserves_model_domain_errors(registry):
+    from hydro_agent.config import Settings
+    from hydro_agent.mcp.client import connect
+    from hydro_agent.models import DomainError
+
+    settings = Settings(HYDRO_DATA_DIR=DATA, HYDRO_DATABASE_URL=registry.repository.database_url)
+    with pytest.raises(DomainError, match="Foundry HTTP 429"):
+        async with connect(settings, registry.incident_id):
+            raise DomainError("Foundry HTTP 429")
 
 
 async def test_mcp_real_stdio_schemas_binding_and_approval(registry):

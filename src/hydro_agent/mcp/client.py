@@ -70,14 +70,21 @@ async def connect(
     if prepare:
         args.append("--prepare")
     parameters = StdioServerParameters(command=sys.executable, args=args, env=env)
+    consumer_error: DomainError | None = None
     try:
         async with stdio_client(parameters) as (read, write):
             async with ClientSession(
                 read, write, read_timeout_seconds=timedelta(seconds=30)
             ) as session:
                 await session.initialize()
-                yield MCPTools(session)
+                try:
+                    yield MCPTools(session)
+                except DomainError as exc:
+                    consumer_error = exc
+                    raise
     except ExceptionGroup:
+        if consumer_error is not None:
+            raise consumer_error from None
         raise DomainError(
             "Session MCP interrompue; consulter l’état de l’incident avant de reprendre."
         ) from None

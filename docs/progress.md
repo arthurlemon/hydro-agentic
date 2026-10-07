@@ -4,7 +4,7 @@
 
 - Dépôt privé `arthurlemon/hydro-agentic` créé et connexion SSH personnelle vérifiée.
 - Plan initial conservé puis traduit en français avec ses 28 sections.
-- Exécution demandée : phases 0 à 2, arrêt avant la configuration Foundry.
+- Demande initiale : phases 0 à 2, puis phase 3 autorisée après création du compte Azure et choix de GPT-5-mini.
 
 ## Décisions
 
@@ -62,4 +62,18 @@ Correction du contrat de télémétrie : `measurement_definitions` explique dés
 
 Les quatre scénarios rejoués avec GPT-5.6 Luna donnent les résultats attendus : P1 sous 24 h avec brouillon en attente (MCP), absence d’urgence pour le faible risque (MCP), preuves insuffisantes sans huile confirmée (Python), preuves insuffisantes pour l’actif inconnu (Python). Une création sans approbation a ensuite été refusée via MCP. [Bilan et observations](essais-openrouter.md).
 
-Point d’arrêt : PostgreSQL fonctionne localement, `INC-1001` attend une approbation, aucun ordre n’a été créé pendant ces essais réels. La prochaine phase est la configuration Foundry; aucune ressource Azure n’a été créée.
+Point d’arrêt des essais OpenRouter : PostgreSQL fonctionne localement, `INC-1001` attend une approbation, aucun ordre n’a été créé pendant ces essais réels. La configuration Foundry a ensuite été autorisée.
+
+## Phase 3 — intégration Foundry et essais
+
+- Azure CLI installé et connecté; abonnement d’essai actif, rôle Owner et protection des dépenses activée. Fournisseur CognitiveServices enregistré. Quota Luna nul dans les régions vérifiées; GPT-5-mini en East US 2 approuvé par l’utilisateur.
+- Groupe, compte AIServices avec identité, projet avec identité et déploiement GlobalStandard créés; rôle Foundry User ajouté au projet. Documentation d’infrastructure poussée : `f2d47bd`.
+- SDK Projects 2.8.0, Identity 1.26.0 et transport aiohttp gérés par uv. Première publication échouée faute d’aiohttp, puis publication réussie après ajout du transport; un test ouvre/ferme le véritable SDK sans réseau.
+- Agent natif versionné avec les dix fonctions et consignes françaises. Adaptateur Responses conserve la conversation cloud et n’envoie que les nouveaux messages utilisateur/résultats d’outils, sans dupliquer les réponses ou perdre les items de raisonnement. Choix explicite `--provider foundry`; pas de clé Azure, de fallback ni de retry d’inférence automatique.
+- Tests nouveaux : module absent observé avant implémentation; deux tests CLI d’abord en échec; régressions HTTP 429 et préservation de l’erreur du modèle à travers MCP d’abord en échec, puis corrigées.
+- Revue indépendante : le schéma final manquait dans les consignes publiées. Correction testée RED→GREEN, agent version 3 publié et sélectionné. Même passe : erreurs d’URL mal formée converties, retries de publication désactivés avec timeouts, fermeture du projet et du credential tentée sans masquer l’erreur originale. Quatre nouveaux cas ont d’abord échoué.
+- Premiers essais : appels réels et fonctions métier réussis, puis HTTP 429. La gestion affichait capacité 50, mais les en-têtes d’inférence affichaient encore les limites de capacité 1. Nouveau déploiement initialisé à 50, essais suivants réussis; ancien déploiement supprimé.
+- Version 3 : P1 avec sept citations et brouillon `INC-1013` en attente, faible risque `INC-1014` sans urgence, température seule `INC-1015` et actif inconnu `INC-1016` avec preuves insuffisantes. Création sans approbation refusée via MCP, état inchangé. `INC-1001` OpenRouter reste inchangé.
+- L’audit du premier P1 version 3 révélait 24 appels modèle : après préparation, une reformulation était refusée car le brouillon était figé. Test reproduisant ce coût supplémentaire en échec, puis arrêt déterministe après le lot d’outils produisant un brouillon validé. Aucun contrôle de preuve ou d’approbation assoupli. Essai final : `INC-1017`, P1 sous 24 h, huit citations valides, cinq appels modèle, attente d’approbation. Création sans approbation de nouveau refusée via MCP; état inchangé.
+- Dernière suite : **69 tests réussis**, mypy valide 18 fichiers. Les tests automatisés ne consomment ni OpenRouter ni Azure; les investigations précédentes sont de véritables appels facturés. [Bilan des essais](essais-foundry.md).
+- Ruff, formatage (50 fichiers), construction source/wheel et `git diff --check` réussis. Lecture réelle de la version 3 : dix fonctions et schéma complet de conclusion présents; limite de dépenses Azure toujours `On`. Application et PostgreSQL restent locaux. Phases 4 à 9 non commencées.

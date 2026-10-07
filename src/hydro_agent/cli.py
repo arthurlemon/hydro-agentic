@@ -4,12 +4,14 @@ import argparse
 import asyncio
 import json
 import sys
+from contextlib import AsyncExitStack
 from typing import Any
 
 from pydantic import ValidationError
 
+from hydro_agent.agent.foundry import FoundryModel, publish_agent
 from hydro_agent.agent.loop import investigate
-from hydro_agent.agent.model import OpenRouterModel
+from hydro_agent.agent.model import ModelClient, OpenRouterModel
 from hydro_agent.config import Settings
 from hydro_agent.mcp.client import connect
 from hydro_agent.mcp.server import build_registry
@@ -19,25 +21,37 @@ from hydro_agent.state.postgres import IncidentRepository
 
 
 async def run(args: argparse.Namespace, settings: Settings) -> dict[str, Any]:
+    if args.command == "publish-foundry":
+        return await publish_agent(
+            settings.azure_ai_project_endpoint,
+            settings.azure_ai_model_deployment,
+            settings.azure_ai_agent_name,
+        )
     repository = IncidentRepository(settings.database_url.get_secret_value())
     if args.command == "investigate":
-        model = OpenRouterModel(
-            settings.openrouter_api_key.get_secret_value(), settings.openrouter_model
-        )
-        state = repository.begin(DataService(settings.data_dir).get_event(args.event_id))
-        incident_id = state["incident_id"]
-        if args.transport == "mcp":
-            async with connect(settings, incident_id, prepare=args.prepare) as remote:
-                await investigate(
-                    model,
-                    remote,
-                    repository,
-                    incident_id,
-                    max_steps=settings.max_steps,
-                    prepare=args.prepare,
+        async with AsyncExitStack() as stack:
+            model: ModelClient
+            if args.provider == "foundry":
+                model = await stack.enter_async_context(
+                    FoundryModel(
+                        settings.azure_ai_project_endpoint,
+                        settings.azure_ai_agent_name,
+                        settings.azure_ai_agent_version,
+                    )
                 )
-        else:
-            tools = build_registry(settings, incident_id, prepare=args.prepare)
+            else:
+                model = OpenRouterModel(
+                    settings.openrouter_api_key.get_secret_value(), settings.openrouter_model
+                )
+            state = repository.begin(DataService(settings.data_dir).get_event(args.event_id))
+            incident_id = state["incident_id"]
+            tools = (
+                await stack.enter_async_context(
+                    connect(settings, incident_id, prepare=args.prepare)
+                )
+                if args.transport == "mcp"
+                else build_registry(settings, incident_id, prepare=args.prepare)
+            )
             await investigate(
                 model,
                 tools,
@@ -61,7 +75,15 @@ async def run(args: argparse.Namespace, settings: Settings) -> dict[str, Any]:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Investigation d’actifs synthétiques — PoC local.")
     commands = parser.add_subparsers(dest="command", required=True)
-    investigation = commands.add_parser("investigate", help="Investiguer avec OpenRouter.")
+    investigation = commands.add_parser(
+        "investigate", help="Investiguer avec OpenRouter ou Foundry."
+    )
+    investigation.add_argument(
+        "--provider",
+        choices=["openrouter", "foundry"],
+        default="openrouter",
+        help="Orchestrateur : openrouter (défaut) ou agent natif foundry.",
+    )
     investigation.add_argument("event_id", help="Identifiant d’événement, par exemple EVT-48392.")
     investigation.add_argument(
         "--prepare", action="store_true", help="Demander un brouillon si justifié."
@@ -72,6 +94,7 @@ def main() -> None:
         default="python",
         help="Transport d’outils : python (défaut) ou mcp.",
     )
+    commands.add_parser("publish-foundry", help="Publier une nouvelle version de l’agent Foundry.")
     for name, description in {
         "state": "Lire l’état de l’incident.",
         "approve": "Approuver comme superviseur (identité locale simulée).",

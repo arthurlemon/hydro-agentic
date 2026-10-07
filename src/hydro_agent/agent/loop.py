@@ -113,6 +113,12 @@ async def _investigate(
                             "content": result.model_dump_json(),
                         }
                     )
+                state = repository.get(incident_id)
+                if state["status"] in FROZEN:
+                    # Le brouillon validé est désormais la conclusion persistée.
+                    # Ne demander ni reformulation du texte figé ni nouvel appel
+                    # payant; tous les outils du lot ont déjà été contrôlés.
+                    return Recommendation.model_validate(state["recommendation"])
                 continue
             try:
                 final = Recommendation.model_validate_json(response.content or "")

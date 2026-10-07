@@ -28,12 +28,16 @@ Les tests utilisent une vraie base PostgreSQL et créent chacun un schéma tempo
 - [Migration PostgreSQL et essais OpenRouter](docs/plan-postgresql.md)
 - [Avancement et vérifications](docs/progress.md)
 - [Résultats des essais réels GPT-5.6 Luna](docs/essais-openrouter.md)
+- [Plan de la phase 3](docs/phase-3-foundry.md)
+- [Configuration Azure Foundry et coûts](docs/foundry-setup.md)
+- [Résultats des essais réels Foundry](docs/essais-foundry.md)
+- [Offres gratuites, crédits et limites](docs/offres-gratuites.md)
 - [Architecture et limites](docs/architecture.md)
 - [Contrats des outils](docs/tool-contracts.md)
 - [Modèle de menaces](docs/threat-model.md)
 - [Passage aux services Azure](docs/production-mapping.md)
 
-La documentation, les procédures, les consignes et l’affichage sont en français. Les identifiants techniques restent en anglais. OpenRouter fournit le modèle de l’application locale; sa clé est conservée dans `.env`, jamais dans Git. Foundry intervient à la phase 3.
+La documentation, les procédures, les consignes et l’affichage sont en français. Les identifiants techniques restent en anglais. OpenRouter reste le fournisseur par défaut (GPT-5.6 Luna); Foundry utilise un agent natif GPT-5-mini. Les secrets sont conservés hors de Git.
 
 ## Investigation réelle avec OpenRouter
 
@@ -82,4 +86,28 @@ Pour un incident déjà présent dans PostgreSQL :
 uv run hydro-mcp --incident INC-1001
 ```
 
-Le serveur utilise stdio pour JSON-RPC et stderr pour les diagnostics. Le client doit être local et de confiance. Aucun serveur HTTP ni accès Foundry distant n’est configuré. Le client transmet la connexion PostgreSQL au serveur MCP, sans transmettre la clé OpenRouter.
+Le serveur utilise stdio pour JSON-RPC et stderr pour les diagnostics. Le client doit être local et de confiance. Aucun serveur MCP HTTP n’est configuré : avec Foundry, l’application relaie les fonctions cloud vers le sous-processus local. Le client transmet la connexion PostgreSQL au serveur MCP, sans transmettre la clé OpenRouter.
+
+## Agent natif Azure Foundry
+
+Azure CLI doit être installé et connecté avec `az login`. Les ressources et droits nécessaires sont décrits dans [la configuration](docs/foundry-setup.md). Renseigner dans `.env` :
+
+```dotenv
+AZURE_AI_PROJECT_ENDPOINT=https://<compte>.services.ai.azure.com/api/projects/<projet>
+AZURE_AI_MODEL_DEPLOYMENT=hydro-gpt-5-mini-poc
+AZURE_AI_AGENT_NAME=hydro-investigator
+AZURE_AI_AGENT_VERSION=<version-publiée>
+```
+
+```bash
+# Publie une nouvelle version seulement quand les consignes/contrats changent.
+uv run hydro-agent publish-foundry
+# Copier la version retournée dans AZURE_AI_AGENT_VERSION.
+
+uv run hydro-agent investigate EVT-LOW --provider foundry
+uv run hydro-agent investigate EVT-48392 --provider foundry --transport mcp --prepare
+```
+
+Foundry conserve l’agent versionné et la conversation pendant l’investigation. L’application exécute les outils, valide les preuves et conserve l’état dans PostgreSQL. La conversation est supprimée au mieux à la fermeture; les incidents et l’audit local restent disponibles. Aucun fallback OpenRouter et aucun retry automatique d’inférence. Les tokens Foundry sont payants et consomment les crédits; les tests automatisés n’appellent pas Azure.
+
+L’identité Entra authentifie l’accès au projet Azure, **pas encore les utilisateurs métier** : les rôles d’opérateur/superviseur restent simulés localement. Foundry ne peut pas approuver un ordre. Les commandes humaines `approve`, `reject` et `resume` restent identiques et hors agent.

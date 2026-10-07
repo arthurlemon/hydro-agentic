@@ -4,7 +4,16 @@ version = "0.1.0"
 description = "Investigation agentique d’actifs électriques — démonstration synthétique"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = ["pydantic>=2.11,<3", "pydantic-settings>=2.8,<3", "httpx>=0.28,<1", "mcp>=1.20,<2", "psycopg[binary]>=3.2,<4"]
+dependencies = [
+    "pydantic>=2.11,<3",
+    "pydantic-settings>=2.8,<3",
+    "httpx>=0.28,<1",
+    "mcp>=1.20,<2",
+    "psycopg[binary]>=3.2,<4",
+    "azure-ai-projects>=2.3,<3",
+    "azure-identity>=1.25,<2",
+    "aiohttp>=3.12,<4",
+]
 
 [project.scripts]
 hydro-agent = "hydro_agent.cli:main"

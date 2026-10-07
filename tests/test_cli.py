@@ -14,6 +14,8 @@ def run_cli(database_url, *args, role="operator"):
         "HYDRO_ROLE": role,
         "HYDRO_ACTOR": "personne-test",
         "OPENROUTER_API_KEY": "",
+        "AZURE_AI_PROJECT_ENDPOINT": "",
+        "AZURE_AI_AGENT_VERSION": "",
     }
     return subprocess.run(
         [sys.executable, "-m", "hydro_agent.cli", *args],
@@ -32,6 +34,21 @@ def test_cli_help_is_french_and_missing_key_is_actionable(database_url):
     assert result.returncode == 1
     assert "OPENROUTER_API_KEY" in result.stderr
     assert "Traceback" not in result.stderr
+
+
+def test_foundry_without_configuration_never_falls_back_to_openrouter(database_url):
+    result = run_cli(database_url, "investigate", "EVT-48392", "--provider", "foundry")
+    assert result.returncode == 1
+    assert "AZURE_AI_PROJECT_ENDPOINT" in result.stderr
+    assert "OPENROUTER_API_KEY" not in result.stderr
+    assert "Traceback" not in result.stderr
+
+
+def test_publish_foundry_requires_configuration_without_openrouter(database_url):
+    result = run_cli(database_url, "publish-foundry")
+    assert result.returncode == 1
+    assert "AZURE_AI_PROJECT_ENDPOINT" in result.stderr
+    assert "OPENROUTER_API_KEY" not in result.stderr
 
 
 async def test_cli_approval_resume_and_restart_are_separate(registry, database_url):

@@ -69,6 +69,65 @@ async def test_agent_iterates_search_and_uses_model_selected_order(registry):
     assert names.count("search_procedures") == 2
 
 
+async def test_prepared_draft_ends_investigation_without_reformulation_loop(registry):
+    import psycopg
+
+    from hydro_agent.agent.loop import investigate
+
+    citations = ["asset:TR-1042", "telemetry:TR-1042:24h", "procedure:TR-MAINT-004"]
+    model = ScriptedModel(
+        [
+            response(
+                calls=[
+                    ("get_asset", {"asset_id": "TR-1042"}),
+                    ("get_recent_telemetry", {"asset_id": "TR-1042"}),
+                    ("get_procedure", {"procedure_id": "TR-MAINT-004"}),
+                ]
+            ),
+            response(
+                calls=[
+                    (
+                        "draft_work_order",
+                        {
+                            "incident_id": registry.incident_id,
+                            "action": "inspection",
+                            "priority": "P1",
+                            "justification": "Inspection P1 requise.",
+                            "citations": citations,
+                        },
+                    ),
+                    ("create_work_order", {"incident_id": registry.incident_id}),
+                ]
+            ),
+            response(
+                Recommendation(
+                    outcome="recommendation_ready",
+                    summary="Reformulation différente.",
+                    action="inspection",
+                    priority="P1",
+                    deadline_hours=24,
+                    citations=citations,
+                ).model_dump_json()
+            ),
+        ]
+    )
+    result = await investigate(
+        model, registry, registry.repository, registry.incident_id, prepare=True, max_steps=3
+    )
+    assert result.summary == "Inspection P1 requise."
+    assert len(model.responses) == 1  # Pas de troisième appel payant après le brouillon validé.
+    state = registry.repository.get(registry.incident_id)
+    assert state["status"] == "awaiting_approval"
+    assert state["approval"] is state["work_order"] is None
+    with psycopg.connect(registry.repository.database_url) as connection:
+        denied = connection.execute(
+            "SELECT payload FROM audit WHERE incident_id=%s "
+            "AND payload->>'name'='create_work_order'",
+            (registry.incident_id,),
+        ).fetchone()[0]
+    assert not denied["ok"]  # Tout le lot d’outils est exécuté avant l’arrêt.
+
+
 async def test_agent_returns_tool_failure_to_model_without_invention(registry, monkeypatch):
     from hydro_agent.agent.loop import investigate
 

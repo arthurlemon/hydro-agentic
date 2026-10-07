@@ -18,20 +18,20 @@ Ressources minimales : groupe dédié, compte Foundry avec identité gérée, pr
 
 ### 1. Infrastructure
 - [x] Vérifier les commandes CLI actuelles; créer le groupe, le compte et le projet.
-- [x] Déployer GPT-5-mini version `2025-08-07`, GlobalStandard, capacité 1 acceptée.
+- [x] Déployer GPT-5-mini version `2025-08-07`, GlobalStandard. Capacité 1 acceptée mais insuffisante au premier essai; déploiement actif initialisé à 50, sans calcul réservé. Ancien déploiement supprimé.
 - [x] Vérifier les endpoints et états; rôle Foundry User ajouté au projet. Ressources décrites dans `docs/foundry-setup.md`. L’accès de données sera vérifié lors de la publication de l’agent.
 
 ### 2. Adaptateur et CLI
-- [ ] Écrire `tests/test_foundry.py` avant `src/hydro_agent/agent/foundry.py` : version figée, conversion des fonctions, plusieurs tours sans duplication, réponses invalides, erreurs sans secrets et fermeture des clients.
-- [ ] Observer RED avec `uv run pytest tests/test_foundry.py -q`.
-- [ ] Ajouter le SDK `azure-ai-projects` 2.x et `azure-identity` avec uv. Fournir une interface compatible `ModelClient.complete(messages, tools)`, sans modifier les règles métier.
-- [ ] Ajouter `--provider openrouter|foundry`, configuration endpoint/déploiement/nom/version; OpenRouter reste le défaut. Séparer la publication d’agent de son invocation pour éviter des versions automatiques à chaque exécution.
+- [x] Écrire `tests/test_foundry.py` avant `src/hydro_agent/agent/foundry.py` : version figée, conversion des fonctions, plusieurs tours sans duplication, réponses invalides, erreurs sans secrets et fermeture des clients.
+- [x] Observer RED avec `uv run pytest tests/test_foundry.py -q`.
+- [x] Ajouter le SDK `azure-ai-projects` 2.x, `azure-identity` et aiohttp avec uv. Interface compatible `ModelClient.complete(messages, tools)`, règles métier inchangées.
+- [x] Ajouter `--provider openrouter|foundry`, configuration endpoint/déploiement/nom/version; OpenRouter reste le défaut. Séparer la publication d’agent de son invocation pour éviter des versions automatiques à chaque exécution.
 - [ ] Tests CLI de configuration et absence de dépendance à une clé OpenRouter pour Foundry; suite entière, Ruff, mypy, build. Commit et push.
 
 ### 3. Essais réels
-- [ ] Publier une version du véritable agent dans Foundry; vérifier ses dix fonctions et consignes.
-- [ ] Utiliser des événements synthétiques distincts pour ne pas écraser le brouillon OpenRouter INC-1001.
-- [ ] Vérifier P1/brouillon via MCP, faible risque et preuves insuffisantes, puis le refus de création sans approbation.
+- [x] Publier une version du véritable agent dans Foundry; version 3 avec dix fonctions, consignes et schéma de conclusion.
+- [x] Utiliser des événements synthétiques distincts pour ne pas écraser le brouillon OpenRouter INC-1001.
+- [x] Vérifier P1/brouillon via MCP, faible risque et preuves insuffisantes, puis le refus de création sans approbation.
 - [ ] Consigner endpoints et résultats sans clés, tokens ou scores de qualité inventés. Commit et push.
 
 ## Points à vérifier

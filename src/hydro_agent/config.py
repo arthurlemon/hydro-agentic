@@ -13,6 +13,10 @@ class Settings(BaseSettings):
 
     openrouter_api_key: SecretStr = SecretStr("")
     openrouter_model: str = "openai/gpt-5.6-luna"
+    azure_ai_project_endpoint: str = ""
+    azure_ai_model_deployment: str = "hydro-gpt-5-mini-poc"
+    azure_ai_agent_name: str = "hydro-investigator"
+    azure_ai_agent_version: str = ""
     data_dir: Path = Field(default=Path("data"), validation_alias="HYDRO_DATA_DIR")
     database_url: SecretStr = Field(
         default=SecretStr("postgresql://hydro:hydro-local@127.0.0.1:55432/hydro"),
