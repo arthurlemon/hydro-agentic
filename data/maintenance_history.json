@@ -1,0 +1,5 @@
+[
+  {"work_order_id":"WO-11231","asset_id":"TR-1042","date":"2025-08-14","type":"inspection de l’huile","finding":"Dégradation mineure historique; ne constitue pas une confirmation actuelle."},
+  {"work_order_id":"WO-11232","asset_id":"TR-1043","date":"2026-08-14","type":"inspection périodique","finding":"Aucune anomalie observée."},
+  {"work_order_id":"WO-11233","asset_id":"TR-1044","date":"2025-08-14","type":"inspection de l’huile","finding":"Dégradation mineure historique; analyse récente nécessaire."}
+]

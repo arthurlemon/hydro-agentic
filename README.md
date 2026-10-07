@@ -1,16 +1,25 @@
-# hydro-agentic
+# Investigation agentique d’actifs électriques
 
-A local-first, utility-inspired agentic asset-investigation proof of concept.
+Preuve de concept inspirée de pratiques d’un distributeur d’électricité. Toutes les données et procédures sont **synthétiques**. Aucun accès à un réseau électrique ou aux systèmes d’Hydro-Québec.
 
-The intended system investigates synthetic electrical-asset anomalies through typed tools, retrieves procedures, and proposes evidence-backed maintenance actions. Backend authorization and explicit human approval govern mock work-order creation.
+## Développement avec uv
 
-## Status
+```bash
+uv python install 3.12
+uv sync --locked
+cp .env.example .env
+uv run pytest
+uv run ruff check .
+uv run ruff format --check .
+uv run mypy
+```
 
-Planning only. Application code, cloud resources, and evaluation results do not exist yet.
+Python est sélectionné par `.python-version`, l’environnement `.venv` et les dépendances sont gérés exclusivement avec **uv**; `uv.lock` fixe leurs versions. Exécuter les commandes depuis la racine du dépôt.
 
-- [Project plan](PROJECT_PLAN.md): architecture, requirements, phases, and definition of done.
-- [Progress](docs/progress.md): phase status and account setup checkpoints.
+## Documentation
 
-Start with Python 3.12+, synthetic data, and a fully local implementation. Cloud provisioning follows a working local vertical slice.
+- [Plan du projet — 28 sections](PROJECT_PLAN.md)
+- [Plan des phases 0 à 2](docs/plan-phases-0-2.md)
+- [Avancement et vérifications](docs/progress.md)
 
-This project does not reproduce Hydro-Québec's internal architecture and uses no real Hydro data or grid-control interfaces.
+La documentation, les procédures, les consignes et l’affichage sont en français. Les identifiants techniques restent en anglais. OpenRouter sera utilisé pour le modèle local à l’application; la clé sera ajoutée dans `.env`, jamais dans Git. Foundry intervient à la phase 3.

@@ -1,0 +1,8 @@
+[
+  {"asset_id":"TR-1042","timestamp":"2026-10-05T13:00:00Z","temperature_c":71,"load_pct":76,"baseline_stddev":0.8,"oil_degradation_confirmed":false,"oil_pressure":4.1},
+  {"asset_id":"TR-1042","timestamp":"2026-10-07T13:00:00Z","temperature_c":88.2,"load_pct":91,"baseline_stddev":3.4,"oil_degradation_confirmed":true,"oil_pressure":4.2},
+  {"asset_id":"TR-1042","timestamp":"2026-10-07T14:00:00Z","temperature_c":90.1,"load_pct":93,"baseline_stddev":3.7,"oil_degradation_confirmed":true,"oil_pressure":4.3},
+  {"asset_id":"TR-1042","timestamp":"2026-10-08T14:00:00Z","temperature_c":70,"load_pct":70,"baseline_stddev":0.5,"oil_degradation_confirmed":false,"oil_pressure":4.1},
+  {"asset_id":"TR-1043","timestamp":"2026-10-07T14:00:00Z","temperature_c":68,"load_pct":60,"baseline_stddev":0.6,"oil_degradation_confirmed":false,"oil_pressure":4.0},
+  {"asset_id":"TR-1044","timestamp":"2026-10-07T14:00:00Z","temperature_c":89,"load_pct":92,"baseline_stddev":3.6,"oil_degradation_confirmed":false,"oil_pressure":4.2}
+]

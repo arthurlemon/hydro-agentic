@@ -1,0 +1,6 @@
+[
+  {"event_id":"EVT-48392","asset_id":"TR-1042","anomaly_type":"abnormal_temperature","severity_score":0.78,"model_confidence":0.91,"timestamp":"2026-10-07T14:25:00Z"},
+  {"event_id":"EVT-LOW","asset_id":"TR-1043","anomaly_type":"temperature_variation","severity_score":0.12,"model_confidence":0.85,"timestamp":"2026-10-07T14:25:00Z"},
+  {"event_id":"EVT-TEMP","asset_id":"TR-1044","anomaly_type":"abnormal_temperature","severity_score":0.65,"model_confidence":0.88,"timestamp":"2026-10-07T14:25:00Z"},
+  {"event_id":"EVT-UNKNOWN","asset_id":"TR-INCONNU","anomaly_type":"abnormal_temperature","severity_score":0.7,"model_confidence":0.8,"timestamp":"2026-10-07T14:25:00Z"}
+]

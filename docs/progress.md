@@ -1,50 +1,27 @@
-# Progress and setup checkpoints
+# Avancement
 
-## Working agreement
+## Dépôt
 
-- Implement the supplied plan one phase at a time.
-- Report each phase's delivered behavior and verification before advancing.
-- Tell the user when browser-based account setup is needed.
-- Keep all project work in this repository.
-- Do not provision cloud resources before the local vertical slice works.
+- Dépôt privé `arthurlemon/hydro-agentic` créé et connexion SSH personnelle vérifiée.
+- Plan initial conservé puis traduit en français avec ses 28 sections.
+- Exécution demandée : phases 0 à 2, arrêt avant la configuration Foundry.
 
-## Current status
+## Décisions
 
-- [x] Save project requirements in `PROJECT_PLAN.md`.
-- [x] Authenticate GitHub CLI as `arthurlemon`.
-- [x] Create private `arthurlemon/hydro-agentic` repository.
-- [x] Push planning documents through the personal SSH alias.
-- [ ] Phase 0: Python bootstrap, tooling, configuration, and sample data.
-- [ ] Phase 1: fully local vertical slice.
-- [ ] Phase 2: MCP tool layer.
-- [ ] Phase 3: Microsoft Foundry.
-- [ ] Phase 4: Azure AI Search.
-- [ ] Phase 5: persistent workflow state.
-- [ ] Phase 6: human-in-the-loop workflow.
-- [ ] Phase 7: observability.
-- [ ] Phase 8: automated evaluations.
-- [ ] Phase 9: Databricks adapter/simulation.
+- uv gère Python 3.12, `.venv`, les dépendances et toutes les commandes Python.
+- OpenRouter remplace l’option Ollama à la demande de l’utilisateur. Clé fournie ultérieurement, tests sans réseau en attendant.
+- SQLite et les contrôles minimaux d’approbation sont introduits dès la phase 1 : aucune création sans état persistant et approbation.
+- La recherche initiale est lexicale, sans embeddings; le contrat permet son remplacement.
+- Identité locale de démonstration configurée par l’hôte, jamais par le LLM.
+- Interfaces partagées : modèles Pydantic → services → registre d’outils; registre et client MCP → même boucle agentique.
 
-## Dependencies to resolve during implementation
+## Phase 0
 
-The phase list describes delivery milestones; section 26 gives dependency order. Minimal state, backend approval enforcement, and idempotency must exist before enabling work-order creation, even though their fuller milestones appear after MCP/Foundry in the phase list.
+Projet uv, configuration secrète masquée, schémas Pydantic, données synthétiques et sept documents français ajoutés. Premier cycle de tests : 3 échecs pour modules absents, puis 3 tests réussis après implémentation. Les contrôles de lint et de typage restent à exécuter avant le commit.
 
-For local development, internal incident persistence and draft preparation must be distinguished from the approval-gated operational action of work-order creation. The detailed tool contracts will make that distinction explicit.
+## Phases suivantes
 
-A deterministic test double can validate orchestration plumbing, but it does not prove autonomous LLM tool selection. Choose the local model/provider when implementing the agent loop and report which mode was tested.
-
-An old oil-degradation finding alone must not silently become a claim of currently confirmed degradation. Fixtures and procedure conditions must support the actual recommendation.
-
-## Browser/account checkpoints
-
-| When | Setup |
-|---|---|
-| Repository creation | GitHub CLI browser/device authorization as `arthurlemon`; SSH is already verified through `github.com-perso` |
-| Phase 0 and deterministic local services | No cloud account required |
-| Local model-backed agent loop | Confirm available local model or provider credentials before selecting the adapter |
-| Phase 3 | Azure account/subscription, Foundry access, suitable region/model availability, project and model deployment |
-| Phase 4 | Azure AI Search availability and permissions; verify Free Tier availability before provisioning |
-| Optional Cosmos DB / Application Insights | Reuse Azure subscription and verify resource permissions/configuration |
-| Optional real Databricks integration | Databricks workspace and model-serving credentials; not required for the mock |
-
-Cloud offerings, SDKs, authentication, and free-tier availability must be checked against current documentation when those phases begin.
+- Phase 1 : services, état, agent et CLI en cours.
+- Phase 2 : transport MCP à implémenter.
+- Validation réelle du modèle : en attente de `OPENROUTER_API_KEY`.
+- Phases 3 à 9 : non commencées; aucune ressource Azure créée.

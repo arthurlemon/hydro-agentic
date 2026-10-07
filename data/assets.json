@@ -1,0 +1,5 @@
+[
+  {"asset_id":"TR-1042","type":"transformer","substation":"MTL-NORD-07","commissioned":"1997-06-12","manufacturer":"Fabricant fictif","rating_mva":50,"criticality":"high"},
+  {"asset_id":"TR-1043","type":"transformer","substation":"MTL-NORD-08","commissioned":"2018-02-10","manufacturer":"Fabricant fictif","rating_mva":25,"criticality":"low"},
+  {"asset_id":"TR-1044","type":"transformer","substation":"MTL-NORD-09","commissioned":"2005-04-11","manufacturer":"Fabricant fictif","rating_mva":40,"criticality":"high"}
+]

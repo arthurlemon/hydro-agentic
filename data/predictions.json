@@ -1,0 +1,5 @@
+[
+  {"asset_id":"TR-1042","failure_probability_30d":0.68,"risk_level":"high","main_factors":["température anormale","dégradation de l’huile","charge élevée soutenue"],"model_version":"transformer-risk-v1-simulation"},
+  {"asset_id":"TR-1043","failure_probability_30d":0.04,"risk_level":"low","main_factors":["variation mineure"],"model_version":"transformer-risk-v1-simulation"},
+  {"asset_id":"TR-1044","failure_probability_30d":0.42,"risk_level":"medium","main_factors":["température anormale","huile non confirmée"],"model_version":"transformer-risk-v1-simulation"}
+]
