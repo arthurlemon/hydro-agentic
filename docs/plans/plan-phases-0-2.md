@@ -1,6 +1,6 @@
 # Plan d’implémentation — phases 0 à 2
 
-Exécution native dans cette session, selon la demande de l’utilisateur. Spécification : [PROJECT_PLAN.md](../PROJECT_PLAN.md).
+Exécution native dans cette session, selon la demande de l’utilisateur. Spécification : [PROJECT_PLAN.md](../../PROJECT_PLAN.md).
 
 ## Objectif et décisions
 
@@ -42,7 +42,7 @@ Fichiers : `agent/model.py`, `agent/loop.py`, `cli.py`, `scripts/run_local.py`.
 - [x] Adaptateur OpenRouter et protocole de modèle injectable.
 - [x] CLI `investigate`, `state`, `approve`, `reject`, `resume`; approbation hors agent.
 - [x] Cas de risque élevé, faible risque, température seule, actif inconnu et document malveillant.
-- [x] Essais avec une clé OpenRouter réelle et GPT-5.6 Luna : quatre scénarios observés, transports Python et MCP, contrôle d’approbation vérifié. Voir `docs/essais-openrouter.md`.
+- [x] Essais avec une clé OpenRouter réelle et GPT-5.6 Luna : quatre scénarios observés, transports Python et MCP, contrôle d’approbation vérifié. Voir `docs/history/essais-openrouter.md`.
 
 ## 4. MCP — phase 2
 
@@ -57,4 +57,4 @@ Fichiers : `mcp/server.py`, `mcp/client.py`, tests d’intégration stdio.
 - [x] Contrôles finaux réussis : 43 tests, Ruff, mypy, distribution source et wheel.
 - [x] Commits `0b1cf86` et `78345cd` poussés sur `origin/main`.
 
-Arrêt avant la phase 3. Les écarts mineurs au découpage initial et les vérifications sont consignés dans [le suivi](progress.md).
+Arrêt avant la phase 3. Les écarts mineurs au découpage initial et les vérifications sont consignés dans [le suivi](../history/progress.md).

@@ -6,7 +6,7 @@
 
 L’adaptateur et ses tests HTTP sont implémentés. **Aucun workspace, modèle MLflow ni endpoint Databricks n’a été créé ou testé réellement.** Le fonctionnement en cours reste `HYDRO_ANALYTICS_BACKEND=json`. Le service distant est facultatif; il n’est pas nécessaire pour les phases précédentes.
 
-Pour l’essayer, il faut un compte/workspace, un modèle enregistré et un endpoint CPU compatible, puis une identité autorisée à l’interroger. Free Edition est destinée à l’apprentissage et aux usages personnels non commerciaux, sous quotas/fair use; sa disponibilité réelle de serving et ses restrictions réseau doivent être vérifiées dans le compte. Ne pas remplacer automatiquement cette offre par l’essai Azure Databricks payant après expiration. Voir [les offres et limites](offres-gratuites.md).
+Pour l’essayer, il faut un compte/workspace, un modèle enregistré et un endpoint CPU compatible, puis une identité autorisée à l’interroger. Free Edition est destinée à l’apprentissage et aux usages personnels non commerciaux, sous quotas/fair use; sa disponibilité réelle de serving et ses restrictions réseau doivent être vérifiées dans le compte. Ne pas remplacer automatiquement cette offre par l’essai Azure Databricks payant après expiration. Voir [les offres et limites](../azure/offres-gratuites.md).
 
 ## Contrat du service à déployer
 

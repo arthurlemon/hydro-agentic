@@ -24,30 +24,18 @@ Les tests utilisent une vraie base PostgreSQL et créent chacun un schéma tempo
 ## Documentation
 
 - [Plan du projet — 28 sections](PROJECT_PLAN.md)
-- [Plan des phases 0 à 2](docs/plan-phases-0-2.md)
-- [Migration PostgreSQL et essais OpenRouter](docs/plan-postgresql.md)
-- [Avancement et vérifications](docs/progress.md)
-- [Résultats des essais réels GPT-5.6 Luna](docs/essais-openrouter.md)
-- [Plan de la phase 3](docs/phase-3-foundry.md)
-- [Plan des phases 4 à 9](docs/plan-phases-4-9.md)
-- [Recherche Azure AI Search Free](docs/search-setup.md)
-- [Approbation, rejet et reprise PostgreSQL](docs/approbation-reprise.md)
-- [Traces OpenTelemetry et export facultatif](docs/observabilite.md)
-- [Dix évaluations, résultats et limites](docs/evaluations.md)
-- [Adaptateurs analytiques JSON et Databricks facultatif](docs/databricks.md)
-- [Configuration Azure Foundry et coûts](docs/foundry-setup.md)
-- [Résultats des essais réels Foundry](docs/essais-foundry.md)
-- [Offres gratuites, crédits et limites](docs/offres-gratuites.md)
-- [Architecture et limites](docs/architecture.md)
-- [Contrats des outils](docs/tool-contracts.md)
-- [Modèle de menaces](docs/threat-model.md)
-- [Passage aux services Azure](docs/production-mapping.md)
+- [Index de la documentation](docs/README.md)
+- [Design de la démo cloud et cycle de vie](docs/architecture/cloud-demo.md)
+- [Configuration Foundry](docs/azure/foundry-setup.md) et [Search Free](docs/azure/search-setup.md)
+- [Approbation et reprise](docs/guides/approbation-reprise.md)
+- [Évaluations](docs/evaluations/runner.md) et [traces](docs/guides/observabilite.md)
+- [Avancement et vérifications](docs/history/progress.md)
 
 La documentation, les procédures, les consignes et l’affichage sont en français. Les identifiants techniques restent en anglais. OpenRouter reste le fournisseur par défaut (GPT-5.6 Luna); Foundry utilise un agent natif GPT-5-mini. Les secrets sont conservés hors de Git.
 
 ## Investigation réelle avec OpenRouter
 
-La phase 4 ajoute Azure AI Search Free. Après configuration Entra et indexation, sélectionner `HYDRO_SEARCH_BACKEND=azure`; le mode `local` reste disponible explicitement. Voir [la configuration Search](docs/search-setup.md). Les tests sélectionnent la recherche locale et n’appellent pas Azure.
+La phase 4 ajoute Azure AI Search Free. Après configuration Entra et indexation, sélectionner `HYDRO_SEARCH_BACKEND=azure`; le mode `local` reste disponible explicitement. Voir [la configuration Search](docs/azure/search-setup.md). Les tests sélectionnent la recherche locale et n’appellent pas Azure.
 
 Après avoir copié `.env.example` vers `.env`, renseigner `OPENROUTER_API_KEY` et choisir un modèle prenant en charge les appels d’outils avec `OPENROUTER_MODEL` (défaut : `openai/gpt-5.6-luna`). Cette exécution appelle une API payante selon la tarification du modèle; les tests automatisés n’appellent pas OpenRouter.
 
@@ -98,7 +86,7 @@ Le serveur utilise stdio pour JSON-RPC et stderr pour les diagnostics. Le client
 
 ## Agent natif Azure Foundry
 
-Azure CLI doit être installé et connecté avec `az login`. Les ressources et droits nécessaires sont décrits dans [la configuration](docs/foundry-setup.md). Renseigner dans `.env` :
+Azure CLI doit être installé et connecté avec `az login`. Les ressources et droits nécessaires sont décrits dans [la configuration](docs/azure/foundry-setup.md). Renseigner dans `.env` :
 
 ```dotenv
 AZURE_AI_PROJECT_ENDPOINT=https://<compte>.services.ai.azure.com/api/projects/<projet>

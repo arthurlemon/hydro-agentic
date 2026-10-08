@@ -1,4 +1,4 @@
-# Architecture — phases 0 à 3
+# Architecture du socle local et Foundry — phases 0 à 3
 
 ```text
 CLI humaine → boucle agentique → OpenRouter OU agent natif Foundry

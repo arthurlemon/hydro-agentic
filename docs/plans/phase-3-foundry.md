@@ -19,7 +19,7 @@ Ressources minimales : groupe dédié, compte Foundry avec identité gérée, pr
 ### 1. Infrastructure
 - [x] Vérifier les commandes CLI actuelles; créer le groupe, le compte et le projet.
 - [x] Déployer GPT-5-mini version `2025-08-07`, GlobalStandard. Capacité 1 acceptée mais insuffisante au premier essai; déploiement actif initialisé à 50, sans calcul réservé. Ancien déploiement supprimé.
-- [x] Vérifier les endpoints et états; rôle Foundry User ajouté au projet. Ressources décrites dans `docs/foundry-setup.md`. L’accès de données sera vérifié lors de la publication de l’agent.
+- [x] Vérifier les endpoints et états; rôle Foundry User ajouté au projet. Ressources décrites dans `docs/azure/foundry-setup.md`. L’accès de données sera vérifié lors de la publication de l’agent.
 
 ### 2. Adaptateur et CLI
 - [x] Écrire `tests/test_foundry.py` avant `src/hydro_agent/agent/foundry.py` : version figée, conversion des fonctions, plusieurs tours sans duplication, réponses invalides, erreurs sans secrets et fermeture des clients.

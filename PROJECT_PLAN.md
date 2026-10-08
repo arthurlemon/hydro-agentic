@@ -355,7 +355,7 @@ Conserver `predict_failure_risk()` et ajouter `MockAnalyticsService` puis `Datab
 7. Tests et évaluations des succès, erreurs, hallucinations, injections, droits, approbations et doublons.
 8. Traces des appels, latences, erreurs et décisions.
 9. Infrastructure Bicep : AI Search, Cosmos DB, Functions, Application Insights et stockage selon les besoins; déploiement Foundry documenté séparément au besoin.
-10. `docs/production-mapping.md` : correspondance avec les services d’entreprise.
+10. `docs/architecture/production-mapping.md` : correspondance avec les services d’entreprise.
 
 | Preuve de concept | Équivalent cible |
 |---|---|

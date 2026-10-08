@@ -17,6 +17,6 @@ Les phases 0 à 2 sont locales. Foundry et Azure AI Search Free sont désormais 
 ## Passage à Foundry
 
 1. Réalisé : clé OpenRouter locale configurée et parcours réels Python/MCP exécutés avec GPT-5.6 Luna.
-2. Réalisé : outils choisis, citations, brouillon et refus de création avant approbation examinés. Voir [les essais](essais-openrouter.md).
+2. Réalisé : outils choisis, citations, brouillon et refus de création avant approbation examinés. Voir [les essais](../history/essais-openrouter.md).
 3. Réalisé : abonnement gratuit connecté, protection des dépenses activée. GPT-5-mini en East US 2 approuvé par l’utilisateur, car le quota Luna vaut zéro dans les régions vérifiées.
-4. Ressources et droits créés; SDK Projects 2.x, agent natif et API Responses. Voir [configuration](foundry-setup.md) et [plan de phase 3](phase-3-foundry.md). Le transport MCP reste local : l’application traite les appels de fonctions retournés par Foundry.
+4. Ressources et droits créés; SDK Projects 2.x, agent natif et API Responses. Voir [configuration](../azure/foundry-setup.md) et [plan de phase 3](../plans/phase-3-foundry.md). Le transport MCP reste local : l’application traite les appels de fonctions retournés par Foundry.
