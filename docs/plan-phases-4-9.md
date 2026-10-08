@@ -18,9 +18,9 @@
 
 ## 2. Phases 5–6 — état et approbation
 
-- [ ] Confirmer les livrables PostgreSQL déjà implémentés : transactions, verrou interprocessus, reprise, approbation/rejet, brouillon figé et ordre unique.
-- [ ] Exécuter les tests CLI/MCP après redémarrage; documenter la procédure d’approbation, sans approuver les incidents réels existants.
-- [ ] Compléter uniquement les manques observés; Cosmos reste facultatif et non déployé.
+- [x] Confirmer les livrables PostgreSQL déjà implémentés : transactions, verrou interprocessus, reprise, approbation/rejet, brouillon figé et ordre unique.
+- [x] Exécuter les tests CLI/MCP après redémarrage; documenter la procédure d’approbation, sans approuver les incidents réels existants.
+- [x] Compléter uniquement les manques observés; Cosmos reste facultatif et non déployé. Pas de changement métier requis; ajout de couverture CLI du rejet.
 
 ## 3. Phase 7 — observabilité
 

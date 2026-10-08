@@ -85,3 +85,9 @@ Point d’arrêt des essais OpenRouter : PostgreSQL fonctionne localement, `INC-
 - Search Free créé en Canada Central après refus de capacité en East US 2. Clés désactivées, Entra et rôles limités au service; sept documents indexés dans `procedures-v1`, BM25 français sans embeddings ni offre payante. Bicep compilé, pas de déploiement Bicep exécuté.
 - Contrat `ProcedureSearch`, adaptateur Azure et configuration propagée à MCP. Aucun repli local silencieux; extraits non probants, documents complets et sources inchangées. Dix tests d’abord en échec, puis suite de **79 tests réussis**, Ruff/formatage, mypy (19 fichiers), construction et diff vérifiés.
 - Recherche réelle : TR-MAINT-004 puis TR-OIL-002. Investigation réelle Foundry → MCP → Azure Search : `INC-1018`, P1 sous 24 heures, cinq citations, trois appels modèle, attente d’approbation. Création sans approbation refusée via MCP et état inchangé. Les anciens incidents restent inchangés. [Configuration et bilan](search-setup.md).
+
+## Phases 5–6 — confirmation des contrôles déjà présents
+
+- Transactions PostgreSQL, état hors conversation, verrou interprocessus, brouillon figé, approbation/rejet et ordre unique déjà livrés : pas de réimplémentation ni de Cosmos DB.
+- Couverture CLI ajoutée pour rejet par superviseur, état conservé après redémarrage, impossibilité de reprise et de réapprobation. Suite : **80 tests réussis**, Ruff et mypy valides. Tests CLI/MCP d’approbation/reprise/idempotence et tests PostgreSQL concurrents réexécutés dans la suite.
+- [Procédure humaine et limites](approbation-reprise.md) documentées. Aucun incident applicatif approuvé ou ordre créé; la base applicative n’a pas été arrêtée. Phase 4 poussée : `d362503`.

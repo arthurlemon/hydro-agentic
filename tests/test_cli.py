@@ -65,3 +65,21 @@ async def test_cli_approval_resume_and_restart_are_separate(registry, database_u
     assert first.returncode == second.returncode == 0
     assert json.loads(first.stdout) == json.loads(second.stdout)
     assert json.loads(first.stdout)["simulated"] is True
+
+
+async def test_cli_rejection_persists_across_restart_and_cannot_be_resumed(registry, database_url):
+    assert (await draft(registry)).ok
+    denied = run_cli(database_url, "reject", registry.incident_id)
+    assert denied.returncode == 1
+    rejected = run_cli(database_url, "reject", registry.incident_id, role="maintenance_supervisor")
+    assert rejected.returncode == 0, rejected.stderr
+    state = json.loads(run_cli(database_url, "state", registry.incident_id).stdout)
+    assert state["status"] == "rejected"
+    assert state["approval"] is None and state["work_order"] is None
+    assert run_cli(database_url, "resume", registry.incident_id).returncode == 1
+    assert (
+        run_cli(
+            database_url, "approve", registry.incident_id, role="maintenance_supervisor"
+        ).returncode
+        == 1
+    )
