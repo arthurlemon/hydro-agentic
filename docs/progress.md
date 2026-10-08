@@ -78,3 +78,10 @@ Point d’arrêt des essais OpenRouter : PostgreSQL fonctionne localement, `INC-
 - Dernière suite : **69 tests réussis**, mypy valide 18 fichiers. Les tests automatisés ne consomment ni OpenRouter ni Azure; les investigations précédentes sont de véritables appels facturés. [Bilan des essais](essais-foundry.md).
 - Ruff, formatage (50 fichiers), construction source/wheel et `git diff --check` réussis. Lecture réelle de la version 3 : dix fonctions et schéma complet de conclusion présents; limite de dépenses Azure toujours `On`. Application et PostgreSQL restent locaux. Phases 4 à 9 non commencées.
 - Phase 3 terminée et poussée sur `main` : `2afe91d`. Arrêt demandé après le travail courant; aucune phase suivante lancée. PostgreSQL local et le déploiement Foundry restent disponibles; aucun ordre créé dans les essais réels.
+
+## Phase 4 — recherche Azure (reprise autorisée)
+
+- Demande de poursuivre les phases suivantes reçue; l’arrêt précédent est levé. Plan : [phases 4 à 9](plan-phases-4-9.md).
+- Search Free créé en Canada Central après refus de capacité en East US 2. Clés désactivées, Entra et rôles limités au service; sept documents indexés dans `procedures-v1`, BM25 français sans embeddings ni offre payante. Bicep compilé, pas de déploiement Bicep exécuté.
+- Contrat `ProcedureSearch`, adaptateur Azure et configuration propagée à MCP. Aucun repli local silencieux; extraits non probants, documents complets et sources inchangées. Dix tests d’abord en échec, puis suite de **79 tests réussis**, Ruff/formatage, mypy (19 fichiers), construction et diff vérifiés.
+- Recherche réelle : TR-MAINT-004 puis TR-OIL-002. Investigation réelle Foundry → MCP → Azure Search : `INC-1018`, P1 sous 24 heures, cinq citations, trois appels modèle, attente d’approbation. Création sans approbation refusée via MCP et état inchangé. Les anciens incidents restent inchangés. [Configuration et bilan](search-setup.md).

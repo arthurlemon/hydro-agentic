@@ -3,9 +3,14 @@
 import re
 import unicodedata
 from pathlib import Path
-from typing import Any
+from typing import Any, Protocol
 
 from hydro_agent.models import DomainError
+
+
+class ProcedureSearch(Protocol):
+    def get(self, procedure_id: str) -> dict[str, Any]: ...
+    def search(self, query: str, limit: int = 5) -> list[dict[str, Any]]: ...
 
 
 def tokens(text: str) -> set[str]:

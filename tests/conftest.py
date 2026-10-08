@@ -12,6 +12,12 @@ from hydro_agent.models import Identity
 DATA = Path(__file__).resolve().parents[1] / "data"
 
 
+@pytest.fixture(autouse=True)
+def no_cloud_search_by_default(monkeypatch):
+    # La suite normale reste hors ligne, même lorsque .env choisit Azure.
+    monkeypatch.setenv("HYDRO_SEARCH_BACKEND", "local")
+
+
 @pytest.fixture
 def database_url():
     # Chaque test possède uniquement son propre schéma; aucune table applicative supprimée.

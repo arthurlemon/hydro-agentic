@@ -16,11 +16,18 @@ from hydro_agent.config import Settings
 from hydro_agent.mcp.client import connect
 from hydro_agent.mcp.server import build_registry
 from hydro_agent.models import DomainError
+from hydro_agent.services.azure_search import index_procedures
 from hydro_agent.services.data import DataService
 from hydro_agent.state.postgres import IncidentRepository
 
 
 async def run(args: argparse.Namespace, settings: Settings) -> dict[str, Any]:
+    if args.command == "index-procedures":
+        return index_procedures(
+            settings.azure_search_endpoint,
+            settings.azure_search_index,
+            settings.data_dir / "procedures",
+        )
     if args.command == "publish-foundry":
         return await publish_agent(
             settings.azure_ai_project_endpoint,
@@ -95,6 +102,7 @@ def main() -> None:
         help="Transport d’outils : python (défaut) ou mcp.",
     )
     commands.add_parser("publish-foundry", help="Publier une nouvelle version de l’agent Foundry.")
+    commands.add_parser("index-procedures", help="Indexer les procédures dans Azure AI Search.")
     for name, description in {
         "state": "Lire l’état de l’incident.",
         "approve": "Approuver comme superviseur (identité locale simulée).",

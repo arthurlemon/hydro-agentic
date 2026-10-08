@@ -13,6 +13,7 @@ dependencies = [
     "azure-ai-projects>=2.3,<3",
     "azure-identity>=1.25,<2",
     "aiohttp>=3.12,<4",
+    "azure-search-documents>=11.6,<12",
 ]
 
 [project.scripts]

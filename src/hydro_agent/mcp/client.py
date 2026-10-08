@@ -65,6 +65,9 @@ async def connect(
         HYDRO_ACTOR=settings.actor,
         HYDRO_ROLE=settings.role.value,
         OPENROUTER_API_KEY="",
+        HYDRO_SEARCH_BACKEND=settings.search_backend,
+        AZURE_SEARCH_ENDPOINT=settings.azure_search_endpoint,
+        AZURE_SEARCH_INDEX=settings.azure_search_index,
     )
     args = ["-m", "hydro_agent.mcp.server", "--incident", incident_id]
     if prepare:

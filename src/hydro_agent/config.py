@@ -1,6 +1,7 @@
 """Configuration locale; les secrets ne sont jamais sérialisés dans les traces."""
 
 from pathlib import Path
+from typing import Literal
 
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -17,6 +18,11 @@ class Settings(BaseSettings):
     azure_ai_model_deployment: str = "hydro-gpt-5-mini-poc"
     azure_ai_agent_name: str = "hydro-investigator"
     azure_ai_agent_version: str = ""
+    search_backend: Literal["local", "azure"] = Field(
+        default="local", validation_alias="HYDRO_SEARCH_BACKEND"
+    )
+    azure_search_endpoint: str = ""
+    azure_search_index: str = "procedures-v1"
     data_dir: Path = Field(default=Path("data"), validation_alias="HYDRO_DATA_DIR")
     database_url: SecretStr = Field(
         default=SecretStr("postgresql://hydro:hydro-local@127.0.0.1:55432/hydro"),

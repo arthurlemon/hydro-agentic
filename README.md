@@ -29,6 +29,8 @@ Les tests utilisent une vraie base PostgreSQL et créent chacun un schéma tempo
 - [Avancement et vérifications](docs/progress.md)
 - [Résultats des essais réels GPT-5.6 Luna](docs/essais-openrouter.md)
 - [Plan de la phase 3](docs/phase-3-foundry.md)
+- [Plan des phases 4 à 9](docs/plan-phases-4-9.md)
+- [Recherche Azure AI Search Free](docs/search-setup.md)
 - [Configuration Azure Foundry et coûts](docs/foundry-setup.md)
 - [Résultats des essais réels Foundry](docs/essais-foundry.md)
 - [Offres gratuites, crédits et limites](docs/offres-gratuites.md)
@@ -40,6 +42,8 @@ Les tests utilisent une vraie base PostgreSQL et créent chacun un schéma tempo
 La documentation, les procédures, les consignes et l’affichage sont en français. Les identifiants techniques restent en anglais. OpenRouter reste le fournisseur par défaut (GPT-5.6 Luna); Foundry utilise un agent natif GPT-5-mini. Les secrets sont conservés hors de Git.
 
 ## Investigation réelle avec OpenRouter
+
+La phase 4 ajoute Azure AI Search Free. Après configuration Entra et indexation, sélectionner `HYDRO_SEARCH_BACKEND=azure`; le mode `local` reste disponible explicitement. Voir [la configuration Search](docs/search-setup.md). Les tests sélectionnent la recherche locale et n’appellent pas Azure.
 
 Après avoir copié `.env.example` vers `.env`, renseigner `OPENROUTER_API_KEY` et choisir un modèle prenant en charge les appels d’outils avec `OPENROUTER_MODEL` (défaut : `openai/gpt-5.6-luna`). Cette exécution appelle une API payante selon la tarification du modèle; les tests automatisés n’appellent pas OpenRouter.
 
