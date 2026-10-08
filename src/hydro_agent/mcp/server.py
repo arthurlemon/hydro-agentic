@@ -11,6 +11,7 @@ from mcp.server.stdio import stdio_server
 
 from hydro_agent.config import Settings
 from hydro_agent.models import DomainError, ToolResult
+from hydro_agent.observability.tracing import configure, shutdown, span
 from hydro_agent.services.azure_search import AzureSearchService
 from hydro_agent.services.data import DataService
 from hydro_agent.services.search import SearchService
@@ -49,7 +50,10 @@ def build_server(registry: ToolRegistry) -> Server[Any, Any]:
     @server.call_tool(validate_input=False)  # type: ignore[untyped-decorator]
     async def call_tool(name: str, arguments: dict[str, Any]) -> types.CallToolResult:
         # Une validation commune produit les mêmes erreurs françaises en Python et en MCP.
-        result = await registry.call(name, arguments)
+        meta = server.request_context.meta
+        parent = meta.model_dump() if meta is not None else {}
+        with span("mcp.request", parent=parent, incident_id=registry.incident_id):
+            result = await registry.call(name, arguments)
         return types.CallToolResult(
             content=[types.TextContent(type="text", text=result.model_dump_json())],
             structuredContent=result.model_dump(mode="json"),
@@ -73,10 +77,14 @@ def main() -> None:
     )
     args = parser.parse_args()
     try:
-        asyncio.run(serve(build_registry(Settings(), args.incident, prepare=args.prepare)))
+        settings = Settings()
+        configure(settings.trace_path, settings.otlp_endpoint)
+        asyncio.run(serve(build_registry(settings, args.incident, prepare=args.prepare)))
     except DomainError as exc:
         print(f"Erreur : {exc}", file=sys.stderr)
         raise SystemExit(1) from None
+    finally:
+        shutdown()
 
 
 if __name__ == "__main__":

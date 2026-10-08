@@ -29,6 +29,10 @@ class Settings(BaseSettings):
         validation_alias="HYDRO_DATABASE_URL",
     )
     max_steps: int = Field(default=24, ge=1, le=100, validation_alias="HYDRO_MAX_STEPS")
+    trace_path: Path = Field(
+        default=Path(".hydro/traces.jsonl"), validation_alias="HYDRO_TRACE_PATH"
+    )
+    otlp_endpoint: str = Field(default="", validation_alias="HYDRO_OTLP_ENDPOINT")
     actor: str = Field(default="operateur-local", min_length=1, validation_alias="HYDRO_ACTOR")
     role: Role = Field(default=Role.OPERATOR, validation_alias="HYDRO_ROLE")
 

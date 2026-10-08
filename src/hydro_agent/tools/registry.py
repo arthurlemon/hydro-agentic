@@ -104,6 +104,28 @@ class ToolRegistry:
         ]
 
     async def call(self, name: str, arguments: dict[str, Any]) -> ToolResult:
+        from hashlib import sha256
+
+        from opentelemetry.trace import StatusCode
+
+        from hydro_agent.observability.tracing import span
+
+        with span(
+            "tool", incident_id=self.incident_id, tool_name=name if name in SPECS else "unknown"
+        ) as current:
+            if name == "search_procedures" and isinstance(arguments.get("query"), str):
+                current.set_attribute(
+                    "query_sha256", sha256(arguments["query"].encode()).hexdigest()
+                )
+                current.set_attribute("query_length", len(arguments["query"]))
+            result = await self._call(name, arguments)
+            current.set_attribute("ok", result.ok)
+            current.set_attribute("sources", result.sources)
+            if not result.ok:
+                current.set_status(StatusCode.ERROR)
+            return result
+
+    async def _call(self, name: str, arguments: dict[str, Any]) -> ToolResult:
         started = perf_counter()
         try:
             if name not in SPECS:

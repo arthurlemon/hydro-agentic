@@ -14,6 +14,7 @@ from pydantic import ValidationError
 
 from hydro_agent.config import Settings
 from hydro_agent.models import DomainError, ToolResult
+from hydro_agent.observability.tracing import carrier
 
 
 class MCPTools:
@@ -37,7 +38,7 @@ class MCPTools:
     async def call(self, name: str, arguments: dict[str, Any]) -> ToolResult:
         try:
             result = await self.session.call_tool(
-                name, arguments, read_timeout_seconds=timedelta(seconds=30)
+                name, arguments, read_timeout_seconds=timedelta(seconds=30), meta=carrier()
             )
             if result.structuredContent is None:
                 return ToolResult(ok=False, error="Réponse MCP non structurée ou appel refusé.")
@@ -68,6 +69,8 @@ async def connect(
         HYDRO_SEARCH_BACKEND=settings.search_backend,
         AZURE_SEARCH_ENDPOINT=settings.azure_search_endpoint,
         AZURE_SEARCH_INDEX=settings.azure_search_index,
+        HYDRO_TRACE_PATH=str(settings.trace_path.resolve()),
+        HYDRO_OTLP_ENDPOINT=settings.otlp_endpoint,
     )
     args = ["-m", "hydro_agent.mcp.server", "--incident", incident_id]
     if prepare:

@@ -24,9 +24,9 @@
 
 ## 3. Phase 7 — observabilité
 
-- [ ] Ajouter traces OpenTelemetry par investigation, modèle et outil, identifiant de trace propagé à MCP et audit PostgreSQL.
-- [ ] Journal JSONL local séparé de stdout MCP, avec latence, résultats, requêtes/citations contrôlées et usage; ne pas journaliser clés, URI de connexion, prompts ou documents complets.
-- [ ] Tester la corrélation Python/MCP, erreurs et masquage; documenter l’export OTLP facultatif. Pas d’Application Insights payant par défaut.
+- [x] Ajouter traces OpenTelemetry par investigation, modèle et outil, identifiant de trace propagé à MCP et audit PostgreSQL.
+- [x] Journal JSONL local séparé de stdout MCP, avec latence, résultats, empreintes de requêtes/citations et usage; ne pas journaliser clés, URI de connexion, prompts ou documents complets.
+- [x] Tester la corrélation Python/MCP, erreurs et masquage; documenter l’export OTLP facultatif. Pas d’Application Insights payant par défaut.
 
 ## 4. Phase 8 — évaluations
 

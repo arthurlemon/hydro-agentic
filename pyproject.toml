@@ -14,6 +14,8 @@ dependencies = [
     "azure-identity>=1.25,<2",
     "aiohttp>=3.12,<4",
     "azure-search-documents>=11.6,<12",
+    "opentelemetry-sdk>=1.36,<2",
+    "opentelemetry-exporter-otlp-proto-http>=1.36,<2",
 ]
 
 [project.scripts]

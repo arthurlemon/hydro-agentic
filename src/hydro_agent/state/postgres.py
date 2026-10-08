@@ -9,6 +9,7 @@ import psycopg
 from psycopg.types.json import Jsonb
 
 from hydro_agent.models import Anomaly, DomainError, Identity, Recommendation, Role, ToolResult
+from hydro_agent.observability.tracing import correlation
 
 FROZEN = {"awaiting_approval", "approved", "rejected", "work_order_created"}
 
@@ -296,6 +297,7 @@ class IncidentRepository:
                 self._save(connection, state)
 
     def audit(self, incident_id: str, payload: dict[str, Any]) -> None:
+        payload = {**payload, **correlation()}
         with self._transaction() as connection:
             connection.execute(
                 "INSERT INTO audit(incident_id,timestamp,payload) VALUES(%s,%s,%s)",

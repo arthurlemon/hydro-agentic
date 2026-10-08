@@ -8,6 +8,7 @@ from pydantic import ValidationError
 
 from hydro_agent.agent.model import ModelClient
 from hydro_agent.models import DomainError, Recommendation, ToolResult
+from hydro_agent.observability.tracing import span
 from hydro_agent.state.postgres import FROZEN, IncidentRepository
 
 SYSTEM = """Tu es un assistant d’investigation d’actifs électriques SYNTHÉTIQUES.
@@ -45,7 +46,7 @@ async def investigate(
     max_steps: int = 24,
     prepare: bool = False,
 ) -> Recommendation:
-    with repository.investigation(incident_id):
+    with span("investigation", incident_id=incident_id), repository.investigation(incident_id):
         return await _investigate(
             model, tools, repository, incident_id, max_steps=max_steps, prepare=prepare
         )
@@ -81,16 +82,27 @@ async def _investigate(
         definitions = await tools.definitions()
         for step in range(max_steps):
             started = monotonic()
-            response = await model.complete(messages, definitions)
-            repository.audit(
-                incident_id,
-                {
-                    "kind": "model",
-                    "step": step + 1,
-                    "usage": response.usage,
-                    "latency_ms": round((monotonic() - started) * 1000, 2),
-                },
-            )
+            with span("model", incident_id=incident_id, step=step + 1) as current:
+                response = await model.complete(messages, definitions)
+                for key in (
+                    "input_tokens",
+                    "output_tokens",
+                    "total_tokens",
+                    "prompt_tokens",
+                    "completion_tokens",
+                ):
+                    value = response.usage.get(key)
+                    if isinstance(value, int):
+                        current.set_attribute(key, value)
+                repository.audit(
+                    incident_id,
+                    {
+                        "kind": "model",
+                        "step": step + 1,
+                        "usage": response.usage,
+                        "latency_ms": round((monotonic() - started) * 1000, 2),
+                    },
+                )
             if len(response.calls) > 10:
                 raise DomainError("Trop d’appels d’outils dans une seule réponse du modèle.")
             messages.append(response.message())

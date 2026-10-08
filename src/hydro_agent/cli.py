@@ -16,6 +16,7 @@ from hydro_agent.config import Settings
 from hydro_agent.mcp.client import connect
 from hydro_agent.mcp.server import build_registry
 from hydro_agent.models import DomainError
+from hydro_agent.observability.tracing import configure, shutdown, span
 from hydro_agent.services.azure_search import index_procedures
 from hydro_agent.services.data import DataService
 from hydro_agent.state.postgres import IncidentRepository
@@ -113,7 +114,10 @@ def main() -> None:
         command.add_argument("incident_id", help="Identifiant d’incident, par exemple INC-1001.")
     args = parser.parse_args()
     try:
-        result = asyncio.run(run(args, Settings()))
+        settings = Settings()
+        configure(settings.trace_path, settings.otlp_endpoint)
+        with span("cli", command=args.command):
+            result = asyncio.run(run(args, settings))
         print(json.dumps(result, ensure_ascii=False, indent=2))
     except DomainError as exc:
         print(f"Erreur : {exc}", file=sys.stderr)
@@ -124,6 +128,8 @@ def main() -> None:
             file=sys.stderr,
         )
         raise SystemExit(1) from None
+    finally:
+        shutdown()
 
 
 if __name__ == "__main__":
