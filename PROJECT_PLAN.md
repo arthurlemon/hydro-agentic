@@ -421,20 +421,22 @@ Comment propager l’identité, vérifier les droits, auditer les actions, prév
 
 ## 25. Critères de fin de projet
 
-- [ ] Une anomalie déclenche une investigation.
-- [ ] L’agent sélectionne ses outils de manière autonome.
-- [ ] Actif, télémétrie, prédiction ML et entretien sont récupérés.
-- [ ] Une procédure pertinente est consultée.
-- [ ] La recommandation repose sur des preuves citées.
-- [ ] Les données manquantes entraînent un comportement contrôlé.
-- [ ] Une injection ne contourne pas les contrôles.
-- [ ] Un ordre peut être préparé, mais pas créé sans approbation.
-- [ ] L’ordre approuvé est créé une seule fois.
-- [ ] L’état persiste hors de la conversation.
-- [ ] Les appels sont tracés.
-- [ ] Les évaluations automatisées fonctionnent.
-- [ ] L’architecture est documentée.
-- [ ] Les simulations sont remplaçables par des services Azure/Databricks.
+Statut du PoC synthétique : essais réels OpenRouter/Foundry et Search, tests backend isolés pour approbation/création, évaluations programmées distinctes des performances LLM. Cela ne valide ni une identité métier de production ni toutes les affirmations du texte libre. Databricks distant reste facultatif et non déployé.
+
+- [x] Une anomalie déclenche une investigation.
+- [x] L’agent sélectionne ses outils de manière autonome dans les essais LLM réels.
+- [x] Actif, télémétrie, prédiction ML simulée et entretien sont récupérés.
+- [x] Une procédure pertinente est consultée.
+- [x] La recommandation structurée repose sur des preuves citées.
+- [x] Les données manquantes entraînent un comportement contrôlé.
+- [x] L’injection du scénario ne contourne pas les contrôles backend.
+- [x] Un ordre peut être préparé, mais pas créé sans approbation.
+- [x] L’ordre approuvé est créé une seule fois dans les tests isolés.
+- [x] L’état persiste hors de la conversation.
+- [x] Les appels sont tracés.
+- [x] Les évaluations automatisées fonctionnent, avec limites documentées.
+- [x] L’architecture est documentée.
+- [x] Les simulations sont remplaçables par des adaptateurs Azure/Databricks; validation Databricks réelle restante.
 
 ## 26. Ordre d’implémentation recommandé
 

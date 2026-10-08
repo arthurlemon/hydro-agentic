@@ -12,6 +12,7 @@ from mcp.server.stdio import stdio_server
 from hydro_agent.config import Settings
 from hydro_agent.models import DomainError, ToolResult
 from hydro_agent.observability.tracing import configure, shutdown, span
+from hydro_agent.services.analytics import DatabricksAnalyticsService
 from hydro_agent.services.azure_search import AzureSearchService
 from hydro_agent.services.data import DataService
 from hydro_agent.services.search import SearchService
@@ -21,7 +22,14 @@ from hydro_agent.tools.registry import SPECS, ToolRegistry
 
 def build_registry(settings: Settings, incident_id: str, *, prepare: bool = False) -> ToolRegistry:
     return ToolRegistry(
-        DataService(settings.data_dir),
+        DataService(
+            settings.data_dir,
+            analytics=DatabricksAnalyticsService(
+                settings.databricks_serving_endpoint, settings.databricks_token.get_secret_value()
+            )
+            if settings.analytics_backend == "databricks"
+            else None,
+        ),
         AzureSearchService(settings.azure_search_endpoint, settings.azure_search_index)
         if settings.search_backend == "azure"
         else SearchService(settings.data_dir / "procedures"),

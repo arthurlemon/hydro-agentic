@@ -71,6 +71,11 @@ async def connect(
         AZURE_SEARCH_INDEX=settings.azure_search_index,
         HYDRO_TRACE_PATH=str(settings.trace_path.resolve()),
         HYDRO_OTLP_ENDPOINT=settings.otlp_endpoint,
+        HYDRO_ANALYTICS_BACKEND=settings.analytics_backend,
+        DATABRICKS_SERVING_ENDPOINT=settings.databricks_serving_endpoint,
+        DATABRICKS_TOKEN=settings.databricks_token.get_secret_value()
+        if settings.analytics_backend == "databricks"
+        else "",
     )
     args = ["-m", "hydro_agent.mcp.server", "--incident", incident_id]
     if prepare:

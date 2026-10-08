@@ -37,8 +37,8 @@
 
 ## 5. Phase 9 — analytique remplaçable
 
-- [ ] Contrat `AnalyticsService.predict`, adaptateur JSON simulé et adaptateur Databricks de service de modèle configurable.
-- [ ] Tester erreurs, temps limites, schéma de prédiction et interdiction de fabriquer une valeur en cas de panne.
-- [ ] Documenter les limites Free Edition et les paramètres nécessaires; ne pas ouvrir un essai Azure Databricks ni annoncer un déploiement inexistant.
+- [x] Contrat `AnalyticsService.predict`, adaptateur JSON simulé et adaptateur Databricks de service de modèle configurable.
+- [x] Tester erreurs, temps limites, schéma de prédiction et interdiction de fabriquer une valeur en cas de panne.
+- [x] Documenter les limites Free Edition et les paramètres nécessaires; aucun workspace/endpoint créé, essai Azure Databricks non ouvert. Validation distante facultative en attente de configuration.
 
 Chaque étape se termine par pytest complet, Ruff, mypy et les vérifications pertinentes, puis documentation des résultats et push.

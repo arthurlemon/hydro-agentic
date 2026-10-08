@@ -91,3 +91,22 @@ Point d’arrêt des essais OpenRouter : PostgreSQL fonctionne localement, `INC-
 - Transactions PostgreSQL, état hors conversation, verrou interprocessus, brouillon figé, approbation/rejet et ordre unique déjà livrés : pas de réimplémentation ni de Cosmos DB.
 - Couverture CLI ajoutée pour rejet par superviseur, état conservé après redémarrage, impossibilité de reprise et de réapprobation. Suite : **80 tests réussis**, Ruff et mypy valides. Tests CLI/MCP d’approbation/reprise/idempotence et tests PostgreSQL concurrents réexécutés dans la suite.
 - [Procédure humaine et limites](approbation-reprise.md) documentées. Aucun incident applicatif approuvé ou ordre créé; la base applicative n’a pas été arrêtée. Phase 4 poussée : `d362503`.
+
+## Phase 7 — traces corrélées
+
+- Reprise après redémarrage : `main` propre, phases 4–6 déjà livrées, aucune réimplémentation. Validation de persistance/rejet poussée : `71ebb43`.
+- OpenTelemetry par CLI, investigation, modèle, outil et requête MCP. Contexte W3C en métadonnées, corrélation de l’audit PostgreSQL, JSONL privé séparé de stdout MCP. Requêtes sous forme d’empreinte et longueur, pas de prompts/documents/arguments complets.
+- Trois tests d’abord en échec, puis réussis, dont vrai processus MCP et exception contenant un texte sensible. Suite **83 tests**, Ruff, mypy (21 fichiers), construction et diff vérifiés. Phase poussée : `d8252b0`. [Limites et export OTLP facultatif](observabilite.md).
+
+## Phase 8 — évaluations exécutables
+
+- Dix scénarios dans des copies de données et un schéma PostgreSQL propre, supprimé après exécution. Le mode programmé exerce le backend et la boucle sans prétendre mesurer un LLM; modes Foundry/OpenRouter réels disponibles mais non exécutés dans cette nouvelle suite.
+- Vérificateur testé avec résultat invalide et valide; code de sortie non nul vérifié. Résultat observé versionné : **10/10 en régression**; aucune note sémantique d’hallucination annoncée. Suite **87 tests**, Ruff et mypy (24 fichiers) réussis. Phase poussée : `72df20e`. [Rapports et limites](evaluations.md).
+
+## Phase 9 — contrat analytique
+
+- `AnalyticsService.predict` et adaptateurs JSON/Databricks ajoutés; JSON reste le défaut. Refus d’actif inconnu avant appel distant, endpoint contrôlé, validation de la réponse pour le même actif, délais et erreurs sans réponse brute ni substitution silencieuse.
+- Seize cas d’abord en échec, puis réussis; deux vérifications supplémentaires pour autre actif et sélection distante sans configuration. Suite **105 tests**, mypy (25 fichiers) réussis. L’ordre des imports Ruff a ensuite été corrigé.
+- Aucun compte/endpoint Databricks créé, aucun essai Azure Databricks lancé. [Contrat et configuration facultative](databricks.md). Les incidents applicatifs `INC-1001`, `INC-1017` et `INC-1018` sont toujours en attente, sans approbation ni ordre, vérification PostgreSQL exécutée.
+- Revue indépendante des phases 7–9 : trois défauts confirmés — coercition des probabilités distantes booléennes/textuelles, preuves imbriquées insuffisamment vérifiées et approbation invalide acceptée par l’évaluateur (pas par le backend). Cinq cas ont échoué avant correction, puis validation stricte, contrôle des observations et métadonnées d’approbation. Suite finale **110 tests réussis**, Ruff et mypy (25 fichiers) réussis.
+- Rapports enrichis avec appels modèle terminés, outils observés et tokens disponibles (`null` pour le double); assertion manquante observée en échec puis corrigée. Nouvelle exécution : **10/10 en régression**, rapport versionné régénéré. Aucun nouvel appel cloud ni nouvelle ressource payante durant les phases 7–9.

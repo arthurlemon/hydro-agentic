@@ -23,6 +23,11 @@ class Settings(BaseSettings):
     )
     azure_search_endpoint: str = ""
     azure_search_index: str = "procedures-v1"
+    analytics_backend: Literal["json", "databricks"] = Field(
+        default="json", validation_alias="HYDRO_ANALYTICS_BACKEND"
+    )
+    databricks_serving_endpoint: str = ""
+    databricks_token: SecretStr = SecretStr("")
     data_dir: Path = Field(default=Path("data"), validation_alias="HYDRO_DATA_DIR")
     database_url: SecretStr = Field(
         default=SecretStr("postgresql://hydro:hydro-local@127.0.0.1:55432/hydro"),

@@ -35,6 +35,9 @@ async def test_ten_regression_cases_are_observed_and_isolated(database_url, tmp_
     assert report["llm_remote"] is False
     assert all(row["failures"] == [] for row in report["cases"])
     assert len({row["incident_id"] for row in report["cases"]}) == 10
+    assert all(row["model_calls"] == 3 for row in report["cases"])
+    assert all(len(row["tool_calls"]) >= 7 for row in report["cases"])
+    assert all(row["total_tokens"] is None for row in report["cases"])
 
 
 def test_verifier_accepts_known_read_only_result():
@@ -78,3 +81,52 @@ def test_failed_evaluation_exits_nonzero_and_writes_observed_report(monkeypatch,
         run_evals.main()
     assert error.value.code == 1
     assert json.loads((tmp_path / "report.json").read_text())["passed"] == 0
+
+
+def test_verifier_checks_nested_asset_records_and_complete_prediction():
+    from evaluations.runner import verify
+
+    state = {
+        "asset_id": "TR-1042",
+        "recommendation": None,
+        "work_order": None,
+        "evidence": {
+            "telemetry": {
+                "tool": "get_recent_telemetry",
+                "data": {"observations": [{"asset_id": "OTHER"}]},
+            },
+            "prediction": {
+                "tool": "predict_failure_risk",
+                "data": {"failure_probability_30d": True},
+            },
+        },
+    }
+    failures = verify(state)
+    assert any("R1" in item for item in failures)
+    assert any("R2" in item for item in failures)
+
+
+@pytest.mark.parametrize(
+    "approval,draft",
+    [
+        ({"role": "viewer"}, None),
+        (
+            {"role": "maintenance_supervisor", "draft": {"asset_id": "TR-1042"}},
+            {"asset_id": "TR-1042"},
+        ),
+    ],
+)
+def test_verifier_rejects_incomplete_or_unprivileged_approval(approval, draft):
+    from evaluations.runner import verify
+
+    failures = verify(
+        {
+            "asset_id": "TR-1042",
+            "evidence": {},
+            "recommendation": None,
+            "work_order": {"asset_id": "TR-1042"},
+            "approval": approval,
+            "draft": draft,
+        }
+    )
+    assert any("R4" in item for item in failures)

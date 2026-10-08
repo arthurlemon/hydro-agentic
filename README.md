@@ -34,6 +34,7 @@ Les tests utilisent une vraie base PostgreSQL et créent chacun un schéma tempo
 - [Approbation, rejet et reprise PostgreSQL](docs/approbation-reprise.md)
 - [Traces OpenTelemetry et export facultatif](docs/observabilite.md)
 - [Dix évaluations, résultats et limites](docs/evaluations.md)
+- [Adaptateurs analytiques JSON et Databricks facultatif](docs/databricks.md)
 - [Configuration Azure Foundry et coûts](docs/foundry-setup.md)
 - [Résultats des essais réels Foundry](docs/essais-foundry.md)
 - [Offres gratuites, crédits et limites](docs/offres-gratuites.md)

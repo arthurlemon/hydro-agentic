@@ -8,13 +8,15 @@ from typing import TypeVar
 from pydantic import BaseModel, ValidationError
 
 from hydro_agent.models import Anomaly, Asset, DomainError, Maintenance, Prediction, Telemetry
+from hydro_agent.services.analytics import AnalyticsService, JsonAnalyticsService
 
 T = TypeVar("T", bound=BaseModel)
 
 
 class DataService:
-    def __init__(self, root: Path) -> None:
+    def __init__(self, root: Path, *, analytics: AnalyticsService | None = None) -> None:
         self.root = root
+        self.analytics = analytics if analytics is not None else JsonAnalyticsService(root)
 
     def _read(self, filename: str, model: type[T]) -> list[T]:
         try:
@@ -48,10 +50,7 @@ class DataService:
 
     def predict(self, asset_id: str) -> Prediction:
         self.get_asset(asset_id)
-        for prediction in self._read("predictions.json", Prediction):
-            if prediction.asset_id == asset_id:
-                return prediction
-        raise DomainError("Prédiction ML indisponible; ne pas en déduire une valeur.")
+        return self.analytics.predict(asset_id)
 
     def get_maintenance(self, asset_id: str, at: datetime) -> list[Maintenance]:
         self.get_asset(asset_id)

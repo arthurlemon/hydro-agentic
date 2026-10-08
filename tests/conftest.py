@@ -16,6 +16,7 @@ DATA = Path(__file__).resolve().parents[1] / "data"
 def no_cloud_search_by_default(monkeypatch):
     # La suite normale reste hors ligne, même lorsque .env choisit Azure.
     monkeypatch.setenv("HYDRO_SEARCH_BACKEND", "local")
+    monkeypatch.setenv("HYDRO_ANALYTICS_BACKEND", "json")
 
 
 @pytest.fixture
