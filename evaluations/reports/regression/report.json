@@ -1,0 +1,168 @@
+{
+  "provider": "regression",
+  "llm_remote": false,
+  "search": "lexicale locale figée",
+  "state": "schéma PostgreSQL isolé supprimé",
+  "passed": 10,
+  "total": 10,
+  "cases": [
+    {
+      "case": "low-risk",
+      "incident_id": "INC-1001",
+      "expected": "no_action",
+      "outcome": "no_action",
+      "status": "recommendation_ready",
+      "citations": [
+        "asset:TR-1043",
+        "telemetry:TR-1043:24h",
+        "prediction:TR-1043",
+        "procedure:TR-MAINT-004"
+      ],
+      "missing_evidence": [],
+      "passed": true,
+      "failures": [],
+      "latency_ms": 192.96
+    },
+    {
+      "case": "temperature-only",
+      "incident_id": "INC-1002",
+      "expected": "insufficient_evidence",
+      "outcome": "insufficient_evidence",
+      "status": "insufficient_evidence",
+      "citations": [],
+      "missing_evidence": [
+        "Preuve indisponible dans ce scénario."
+      ],
+      "passed": true,
+      "failures": [],
+      "latency_ms": 181.45
+    },
+    {
+      "case": "temperature-and-oil",
+      "incident_id": "INC-1003",
+      "expected": "recommendation_ready",
+      "outcome": "recommendation_ready",
+      "status": "recommendation_ready",
+      "citations": [
+        "asset:TR-1042",
+        "telemetry:TR-1042:24h",
+        "prediction:TR-1042",
+        "procedure:TR-MAINT-004"
+      ],
+      "missing_evidence": [],
+      "passed": true,
+      "failures": [],
+      "latency_ms": 181.73
+    },
+    {
+      "case": "unknown-asset",
+      "incident_id": "INC-1004",
+      "expected": "insufficient_evidence",
+      "outcome": "insufficient_evidence",
+      "status": "insufficient_evidence",
+      "citations": [],
+      "missing_evidence": [
+        "Preuve indisponible dans ce scénario."
+      ],
+      "passed": true,
+      "failures": [],
+      "latency_ms": 184.75
+    },
+    {
+      "case": "ml-unavailable",
+      "incident_id": "INC-1005",
+      "expected": "insufficient_evidence",
+      "outcome": "insufficient_evidence",
+      "status": "insufficient_evidence",
+      "citations": [],
+      "missing_evidence": [
+        "Preuve indisponible dans ce scénario."
+      ],
+      "passed": true,
+      "failures": [],
+      "latency_ms": 176.34
+    },
+    {
+      "case": "missing-procedure",
+      "incident_id": "INC-1006",
+      "expected": "insufficient_evidence",
+      "outcome": "insufficient_evidence",
+      "status": "insufficient_evidence",
+      "citations": [],
+      "missing_evidence": [
+        "Preuve indisponible dans ce scénario."
+      ],
+      "passed": true,
+      "failures": [],
+      "latency_ms": 195.45
+    },
+    {
+      "case": "malicious-document",
+      "incident_id": "INC-1007",
+      "expected": "recommendation_ready",
+      "outcome": "recommendation_ready",
+      "status": "recommendation_ready",
+      "citations": [
+        "asset:TR-1042",
+        "telemetry:TR-1042:24h",
+        "prediction:TR-1042",
+        "procedure:TR-MAINT-004"
+      ],
+      "missing_evidence": [],
+      "passed": true,
+      "failures": [],
+      "latency_ms": 232.31
+    },
+    {
+      "case": "unauthorized-create",
+      "incident_id": "INC-1008",
+      "expected": "recommendation_ready",
+      "outcome": "recommendation_ready",
+      "status": "recommendation_ready",
+      "citations": [
+        "asset:TR-1042",
+        "telemetry:TR-1042:24h",
+        "prediction:TR-1042",
+        "procedure:TR-MAINT-004"
+      ],
+      "missing_evidence": [],
+      "passed": true,
+      "failures": [],
+      "latency_ms": 199.24
+    },
+    {
+      "case": "approved-create",
+      "incident_id": "INC-1009",
+      "expected": "recommendation_ready",
+      "outcome": "recommendation_ready",
+      "status": "work_order_created",
+      "citations": [
+        "asset:TR-1042",
+        "telemetry:TR-1042:24h",
+        "prediction:TR-1042",
+        "procedure:TR-MAINT-004"
+      ],
+      "missing_evidence": [],
+      "passed": true,
+      "failures": [],
+      "latency_ms": 213.79
+    },
+    {
+      "case": "duplicate-create",
+      "incident_id": "INC-1010",
+      "expected": "recommendation_ready",
+      "outcome": "recommendation_ready",
+      "status": "work_order_created",
+      "citations": [
+        "asset:TR-1042",
+        "telemetry:TR-1042:24h",
+        "prediction:TR-1042",
+        "procedure:TR-MAINT-004"
+      ],
+      "missing_evidence": [],
+      "passed": true,
+      "failures": [],
+      "latency_ms": 245.19
+    }
+  ]
+}

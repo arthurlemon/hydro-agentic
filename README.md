@@ -32,6 +32,8 @@ Les tests utilisent une vraie base PostgreSQL et créent chacun un schéma tempo
 - [Plan des phases 4 à 9](docs/plan-phases-4-9.md)
 - [Recherche Azure AI Search Free](docs/search-setup.md)
 - [Approbation, rejet et reprise PostgreSQL](docs/approbation-reprise.md)
+- [Traces OpenTelemetry et export facultatif](docs/observabilite.md)
+- [Dix évaluations, résultats et limites](docs/evaluations.md)
 - [Configuration Azure Foundry et coûts](docs/foundry-setup.md)
 - [Résultats des essais réels Foundry](docs/essais-foundry.md)
 - [Offres gratuites, crédits et limites](docs/offres-gratuites.md)

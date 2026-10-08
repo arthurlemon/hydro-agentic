@@ -31,6 +31,7 @@ dev = ["pytest>=8.3,<10", "pytest-asyncio>=1,<2", "ruff>=0.12", "mypy>=1.15,<2"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 asyncio_mode = "auto"
 
 [tool.ruff]
@@ -43,7 +44,7 @@ select = ["E", "F", "I", "UP", "B"]
 [tool.mypy]
 python_version = "3.12"
 strict = true
-files = ["src"]
+files = ["src", "evaluations", "scripts/run_evals.py"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/hydro_agent"]

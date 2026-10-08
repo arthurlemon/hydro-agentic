@@ -30,10 +30,10 @@
 
 ## 4. Phase 8 — évaluations
 
-- [ ] Créer `scripts/run_evals.py` et un rapport JSON/Markdown issu des dix cas définis dans le plan.
-- [ ] Vérifications exécutables R1–R7, échec non nul pour violation, résultats observés et données manquantes explicites.
-- [ ] Mode de régression sans LLM distant clairement étiqueté; mode LLM réel facultatif pour mesurer l’agent, sans confondre les deux.
-- [ ] Tester le vérificateur avec un résultat volontairement invalide, les dix cas et l’isolation des états.
+- [x] Créer `scripts/run_evals.py` et un rapport JSON/Markdown issu des dix cas définis dans le plan.
+- [x] Vérifications structurelles exécutables R1–R7, échec non nul pour violation, résultats observés et données manquantes explicites; limites sémantiques documentées.
+- [x] Mode de régression sans LLM distant clairement étiqueté; mode LLM réel facultatif pour mesurer l’agent, sans confondre les deux (pas encore exécuté dans cette suite).
+- [x] Tester le vérificateur avec un résultat volontairement invalide, les dix cas et l’isolation des états.
 
 ## 5. Phase 9 — analytique remplaçable
 
